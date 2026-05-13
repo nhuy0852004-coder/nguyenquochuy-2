@@ -1,16 +1,26 @@
 <div class="product-card sanpham-card-bay">
     <a href="{{ route('web.sanpham.chitiet', $sanpham->duong_dan) }}" class="product-image-link">
         @if ($sanpham->anh_dai_dien)
-            <img src="{{ asset('storage/' . $sanpham->anh_dai_dien) }}" alt="{{ $sanpham->ten_san_pham }}" class="anh-bay-gio">
+            <img
+                src="{{ asset('storage/' . $sanpham->anh_dai_dien) }}"
+                alt="{{ $sanpham->ten_san_pham }}"
+                class="anh-bay-gio"
+            >
         @else
             <div class="product-image-empty">
                 <i class="bi bi-image"></i>
             </div>
         @endif
 
-        @if ($sanpham->gia_khuyen_mai)
-            <span class="product-sale-badge">Giảm giá</span>
-        @endif
+        <div class="product-badges">
+            @if ($sanpham->gia_khuyen_mai)
+                <span class="product-sale-badge">Giảm giá</span>
+            @endif
+
+            @if ($sanpham->noi_bat)
+                <span class="product-featured-badge">Nổi bật</span>
+            @endif
+        </div>
     </a>
 
     <div class="product-body">
@@ -27,6 +37,7 @@
                 <span class="price-sale">
                     {{ number_format($sanpham->gia_khuyen_mai, 0, ',', '.') }} ₫
                 </span>
+
                 <span class="price-old">
                     {{ number_format($sanpham->gia_ban, 0, ',', '.') }} ₫
                 </span>
@@ -34,6 +45,16 @@
                 <span class="price-normal">
                     {{ number_format($sanpham->gia_ban, 0, ',', '.') }} ₫
                 </span>
+            @endif
+        </div>
+
+        <div class="product-stock">
+            @if ($sanpham->so_luong_ton > 0)
+                <i class="bi bi-check-circle"></i>
+                Còn {{ $sanpham->so_luong_ton }} sản phẩm
+            @else
+                <i class="bi bi-x-circle"></i>
+                Hết hàng
             @endif
         </div>
 

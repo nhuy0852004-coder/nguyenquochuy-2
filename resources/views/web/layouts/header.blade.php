@@ -1,37 +1,48 @@
+@php
+    $soLuongGioHang = collect(session('giohang', []))->sum('so_luong');
+@endphp
+
 <header class="web-header">
-    <div class="web-topbar py-2">
-        <div class="container d-flex justify-content-between align-items-center">
-            <div>
-                <i class="bi bi-truck me-1"></i>
-                Giao hàng toàn quốc - Thanh toán khi nhận hàng
-            </div>
+    <div class="web-topbar">
+        <div class="container">
+            <div class="web-topbar-inner">
+                <div>
+                    <i class="bi bi-truck me-1"></i>
+                    Giao hàng toàn quốc - Thanh toán khi nhận hàng
+                </div>
 
-            <div class="d-none d-md-flex gap-3">
-                @if (!empty($caidatcuahang?->so_dien_thoai))
-                    <span><i class="bi bi-telephone me-1"></i> {{ $caidatcuahang->so_dien_thoai }}</span>
-                @endif
+                <div class="web-topbar-contact">
+                    @if (!empty($caidatcuahang?->so_dien_thoai))
+                        <span><i class="bi bi-telephone me-1"></i>{{ $caidatcuahang->so_dien_thoai }}</span>
+                    @endif
 
-                @if (!empty($caidatcuahang?->email))
-                    <span><i class="bi bi-envelope me-1"></i> {{ $caidatcuahang->email }}</span>
-                @endif
+                    @if (!empty($caidatcuahang?->email))
+                        <span><i class="bi bi-envelope me-1"></i>{{ $caidatcuahang->email }}</span>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
 
     <div class="container">
-        <div class="web-navbar d-flex align-items-center justify-content-between">
+        <div class="web-navbar">
+            <button class="web-mobile-menu-btn" type="button" id="webMobileMenuBtn">
+                <i class="bi bi-list"></i>
+            </button>
+
             <a href="{{ route('web.trangchu') }}" class="web-logo">
                 @if (!empty($caidatcuahang?->logo))
                     <img
                         src="{{ asset('storage/' . $caidatcuahang->logo) }}"
                         alt="{{ $caidatcuahang->ten_cua_hang }}"
-                        style="height:34px; width:auto; margin-right:6px;"
                     >
                 @else
-                    <i class="bi bi-shop me-1"></i>
+                    <span class="web-logo-icon">
+                        <i class="bi bi-shop"></i>
+                    </span>
                 @endif
 
-                {{ $caidatcuahang->ten_cua_hang ?? 'Bán Hàng Việt' }}
+                <span>{{ $caidatcuahang->ten_cua_hang ?? 'Bán Hàng Việt' }}</span>
             </a>
 
             <nav class="web-menu">
@@ -43,7 +54,7 @@
                     Sản phẩm
                 </a>
 
-                <a href="#">
+                <a href="{{ route('web.sanpham.index', ['sap_xep' => 'gia_thap']) }}">
                     Khuyến mãi
                 </a>
 
@@ -59,14 +70,14 @@
                 </button>
             </form>
 
-            <div class="d-flex align-items-center gap-2">
+            <div class="web-actions">
+                <button class="web-icon-btn d-lg-none" type="button" id="webSearchMobileBtn" title="Tìm kiếm">
+                    <i class="bi bi-search"></i>
+                </button>
+
                 <a href="{{ route('web.theodoi.index') }}" class="web-icon-btn" title="Theo dõi đơn hàng">
                     <i class="bi bi-receipt"></i>
                 </a>
-
-                @php
-    $soLuongGioHang = collect(session('giohang', []))->sum('so_luong');
-@endphp
 
                 <a href="{{ route('web.giohang.index') }}" class="web-icon-btn" id="nutGioHangHeader" title="Giỏ hàng">
                     <i class="bi bi-bag"></i>
@@ -74,5 +85,49 @@
                 </a>
             </div>
         </div>
+
+        <form action="{{ route('web.sanpham.index') }}" method="GET" class="web-mobile-search" id="webMobileSearch">
+            <input type="text" name="tu_khoa" placeholder="Tìm sản phẩm bạn cần..." value="{{ request('tu_khoa') }}">
+            <button type="submit">
+                <i class="bi bi-search"></i>
+            </button>
+        </form>
+    </div>
+
+    <div class="web-mobile-menu" id="webMobileMenu">
+        <div class="web-mobile-menu-head">
+            <strong>Menu</strong>
+
+            <button type="button" id="webMobileMenuClose">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <nav>
+            <a href="{{ route('web.trangchu') }}">
+                <i class="bi bi-house"></i>
+                Trang chủ
+            </a>
+
+            <a href="{{ route('web.sanpham.index') }}">
+                <i class="bi bi-bag"></i>
+                Sản phẩm
+            </a>
+
+            <a href="{{ route('web.sanpham.index', ['sap_xep' => 'gia_thap']) }}">
+                <i class="bi bi-percent"></i>
+                Khuyến mãi
+            </a>
+
+            <a href="{{ route('web.giohang.index') }}">
+                <i class="bi bi-cart"></i>
+                Giỏ hàng
+            </a>
+
+            <a href="{{ route('web.theodoi.index') }}">
+                <i class="bi bi-receipt"></i>
+                Theo dõi đơn hàng
+            </a>
+        </nav>
     </div>
 </header>

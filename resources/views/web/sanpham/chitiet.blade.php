@@ -15,12 +15,12 @@
         </div>
 
         <section class="section-block">
-            <div class="product-detail-box">
+            <div class="product-detail-box sanpham-card-bay">
                 <div class="row g-0">
                     <div class="col-lg-6">
                         <div class="product-detail-image">
                             @if ($sanpham->anh_dai_dien)
-                                <img src="{{ asset('storage/' . $sanpham->anh_dai_dien) }}" alt="{{ $sanpham->ten_san_pham }}">
+                                <img src="{{ asset('storage/' . $sanpham->anh_dai_dien) }}" alt="{{ $sanpham->ten_san_pham }}" class="anh-bay-gio">
                             @else
                                 <div class="product-image-empty">
                                     <i class="bi bi-image"></i>
@@ -83,7 +83,7 @@
                                 </div>
                             </div>
 
-                            <form action="{{ route('web.giohang.them', $sanpham) }}" method="POST" class="d-flex flex-wrap gap-2">
+                            <form action="{{ route('web.giohang.them', $sanpham) }}" method="POST" class="d-flex flex-wrap gap-2 form-them-gio">
                                 @csrf
 
                                 <input type="hidden" name="so_luong" id="soLuongSubmit" value="1">
