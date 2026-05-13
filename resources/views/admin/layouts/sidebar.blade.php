@@ -40,7 +40,8 @@
 
         <div class="sidebar-label">Vận hành</div>
 
-        <a href="#" class="sidebar-link">
+        <a href="{{ route('admin.thongbao.index') }}"
+            class="sidebar-link {{ request()->routeIs('admin.thongbao.*') ? 'active' : '' }}">
             <i class="bi bi-bell"></i>
             <span>Thông báo</span>
         </a>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Donhang;
+use App\Services\ThongbaoService;
 use Illuminate\Http\Request;
 
 class DonhangController extends Controller
@@ -77,6 +78,10 @@ class DonhangController extends Controller
         $donhang->update([
             'trang_thai_don_hang' => $trangThaiMoi,
         ]);
+
+        if ($trangThaiMoi === Donhang::TRANG_THAI_DA_HUY && $trangThaiCu !== Donhang::TRANG_THAI_DA_HUY) {
+            app(ThongbaoService::class)->taoThongBaoDonHangBiHuy($donhang);
+        }
 
         return redirect()
             ->route('admin.donhang.chitiet', $donhang)

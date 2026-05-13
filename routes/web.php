@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\BangdieukhienController;
 use App\Http\Controllers\Admin\DanhmucController;
 use App\Http\Controllers\Admin\DonhangController;
 use App\Http\Controllers\Admin\SanphamController;
+use App\Http\Controllers\Admin\ThongbaoController;
 use App\Http\Controllers\Web\GiohangController;
 use App\Http\Controllers\Web\SanphamController as WebSanphamController;
 use App\Http\Controllers\Web\ThanhtoanController;
@@ -48,4 +49,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/donhang', [DonhangController::class, 'index'])->name('donhang.index');
     Route::get('/donhang/{donhang}', [DonhangController::class, 'chitiet'])->name('donhang.chitiet');
     Route::patch('/donhang/{donhang}/cap-nhat-trang-thai', [DonhangController::class, 'capnhattrangthai'])->name('donhang.capnhattrangthai');
+
+    Route::get('/thongbao', [ThongbaoController::class, 'index'])->name('thongbao.index');
+    Route::patch('/thongbao/danh-dau-tat-ca-da-doc', [ThongbaoController::class, 'danhDauTatCaDaDoc'])->name('thongbao.daudoc.tatca');
+    Route::patch('/thongbao/{thongbao}/da-doc', [ThongbaoController::class, 'danhDauDaDoc'])->name('thongbao.dadoc');
+    Route::delete('/thongbao/{thongbao}', [ThongbaoController::class, 'xoa'])->name('thongbao.xoa');
 });

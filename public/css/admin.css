@@ -771,3 +771,153 @@ body {
         flex-direction: column;
     }
 }
+
+.header-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: #dc2626;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+    display: grid;
+    place-items: center;
+    border: 2px solid #ffffff;
+}
+
+.thongbao-dropdown {
+    width: 380px;
+    padding: 0;
+    border: 1px solid var(--mau-vien);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.thongbao-dropdown-head {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--mau-vien);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.thongbao-dropdown-item {
+    width: 100%;
+    border: none;
+    background: #ffffff;
+    text-align: left;
+    display: flex;
+    gap: 12px;
+    padding: 13px 16px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.thongbao-dropdown-item:hover {
+    background: #f9fafb;
+}
+
+.thongbao-dropdown-item.chua-doc {
+    background: #eff6ff;
+}
+
+.thongbao-dropdown-content {
+    display: grid;
+    gap: 2px;
+    flex: 1;
+}
+
+.thongbao-dropdown-content strong {
+    color: #111827;
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+.thongbao-dropdown-content small {
+    color: #6b7280;
+}
+
+.thongbao-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.thongbao-donhang {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.thongbao-tonkho {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.thongbao-hethong {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+.thongbao-list {
+    display: grid;
+    gap: 12px;
+}
+
+.thongbao-card {
+    background: #ffffff;
+    border: 1px solid var(--mau-vien);
+    border-radius: 12px;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    gap: 14px;
+    align-items: start;
+}
+
+.thongbao-card.chua-doc {
+    border-color: #bfdbfe;
+    background: #eff6ff;
+}
+
+.thongbao-title {
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.thongbao-content {
+    color: var(--mau-chu-phu);
+    margin-bottom: 8px;
+}
+
+.thongbao-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--mau-chu-phu);
+    font-size: 13px;
+}
+
+.thongbao-actions {
+    display: flex;
+    gap: 8px;
+}
+
+@media (max-width: 576px) {
+    .thongbao-dropdown {
+        width: 320px;
+    }
+
+    .thongbao-card {
+        grid-template-columns: 40px 1fr;
+    }
+
+    .thongbao-actions {
+        grid-column: 2;
+    }
+}

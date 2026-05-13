@@ -8,6 +8,7 @@ use App\Models\Chitietdonhang;
 use App\Models\Donhang;
 use App\Models\Khachhang;
 use App\Models\Sanpham;
+use App\Services\ThongbaoService;
 use Illuminate\Support\Facades\DB;
 
 class ThanhtoanController extends Controller
@@ -102,6 +103,16 @@ class ThanhtoanController extends Controller
 
                 return $donhang;
             });
+
+            $donhang->load('chitietdonhang.sanpham');
+
+            app(ThongbaoService::class)->taoThongBaoDonHangMoi($donhang);
+
+            foreach ($donhang->chitietdonhang as $chitiet) {
+                if ($chitiet->sanpham) {
+                    app(ThongbaoService::class)->taoThongBaoSanPhamGanHet($chitiet->sanpham);
+                }
+            }
 
             session()->forget('giohang');
 
