@@ -49,7 +49,11 @@
                 </div>
 
                 <div class="d-flex justify-content-center gap-2 flex-wrap mt-4">
-                    <a href="{{ route('web.sanpham.index') }}" class="btn-web-primary">
+                    <a href="{{ route('web.theodoi.chitiet', $donhang->ma_don_hang) }}" class="btn-web-primary">
+                        Theo dõi đơn hàng
+                    </a>
+
+                    <a href="{{ route('web.sanpham.index') }}" class="btn-web-light">
                         Tiếp tục mua hàng
                     </a>
 

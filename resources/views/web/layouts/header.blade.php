@@ -33,7 +33,7 @@
                     Khuyến mãi
                 </a>
 
-                <a href="#">
+                <a href="{{ route('web.theodoi.index') }}" class="{{ request()->routeIs('web.theodoi.*') ? 'active' : '' }}">
                     Theo dõi đơn
                 </a>
             </nav>
@@ -46,7 +46,7 @@
             </form>
 
             <div class="d-flex align-items-center gap-2">
-                <a href="#" class="web-icon-btn" title="Theo dõi đơn hàng">
+                <a href="{{ route('web.theodoi.index') }}" class="web-icon-btn" title="Theo dõi đơn hàng">
                     <i class="bi bi-receipt"></i>
                 </a>
 
