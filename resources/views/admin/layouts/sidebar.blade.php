@@ -7,14 +7,16 @@
     <nav class="sidebar-menu">
         <div class="sidebar-label">Tổng quan</div>
 
-        <a href="{{ route('admin.bangdieukhien') }}" class="sidebar-link active">
+        <a href="{{ route('admin.bangdieukhien') }}"
+           class="sidebar-link {{ request()->routeIs('admin.bangdieukhien') ? 'active' : '' }}">
             <i class="bi bi-speedometer2"></i>
             <span>Bảng điều khiển</span>
         </a>
 
         <div class="sidebar-label">Quản lý bán hàng</div>
 
-        <a href="#" class="sidebar-link">
+        <a href="{{ route('admin.danhmuc.index') }}"
+           class="sidebar-link {{ request()->routeIs('admin.danhmuc.*') ? 'active' : '' }}">
             <i class="bi bi-tags"></i>
             <span>Danh mục</span>
         </a>
