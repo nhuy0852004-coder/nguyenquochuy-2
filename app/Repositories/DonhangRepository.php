@@ -69,4 +69,29 @@ class DonhangRepository
             ->limit($limit)
             ->get();
     }
+
+    public function timKiemAdmin(?string $tukhoa, ?string $trangthai, int $limit = 10)
+    {
+        return Donhang::query()
+            ->with('khachhang')
+            ->when($tukhoa, function ($query) use ($tukhoa) {
+                $query->where(function ($q) use ($tukhoa) {
+                    $q->where('ma_don_hang', 'like', '%' . $tukhoa . '%')
+                        ->orWhere('ho_ten_nguoi_nhan', 'like', '%' . $tukhoa . '%')
+                        ->orWhere('so_dien_thoai_nguoi_nhan', 'like', '%' . $tukhoa . '%')
+                        ->orWhere('email_nguoi_nhan', 'like', '%' . $tukhoa . '%');
+                });
+            })
+            ->when($trangthai !== null && $trangthai !== '', function ($query) use ($trangthai) {
+                $query->where('trang_thai_don_hang', $trangthai);
+            })
+            ->orderByDesc('id')
+            ->paginate($limit)
+            ->withQueryString();
+    }
+
+    public function capNhat(Donhang $donhang, array $dulieu): bool
+    {
+        return $donhang->update($dulieu);
+    }
 }

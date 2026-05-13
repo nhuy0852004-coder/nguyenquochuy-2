@@ -100,4 +100,41 @@ class SanphamRepository
             ->limit($limit)
             ->get();
     }
+
+    public function timKiemSanPhamAdmin(?string $tukhoa, ?string $danhmucId, mixed $trangthai, int $limit = 10)
+    {
+        return Sanpham::query()
+            ->with('danhmuc')
+            ->when($tukhoa, function ($query) use ($tukhoa) {
+                $query->where(function ($q) use ($tukhoa) {
+                    $q->where('ten_san_pham', 'like', '%' . $tukhoa . '%')
+                        ->orWhere('ma_san_pham', 'like', '%' . $tukhoa . '%')
+                        ->orWhere('duong_dan', 'like', '%' . $tukhoa . '%');
+                });
+            })
+            ->when($danhmucId, function ($query) use ($danhmucId) {
+                $query->where('danhmuc_id', $danhmucId);
+            })
+            ->when($trangthai !== null && $trangthai !== '', function ($query) use ($trangthai) {
+                $query->where('trang_thai', (bool) $trangthai);
+            })
+            ->orderByDesc('id')
+            ->paginate($limit)
+            ->withQueryString();
+    }
+
+    public function tao(array $dulieu): Sanpham
+    {
+        return Sanpham::create($dulieu);
+    }
+
+    public function capNhat(Sanpham $sanpham, array $dulieu): bool
+    {
+        return $sanpham->update($dulieu);
+    }
+
+    public function xoa(Sanpham $sanpham): bool
+    {
+        return $sanpham->delete();
+    }
 }

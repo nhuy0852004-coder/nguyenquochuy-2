@@ -1,0 +1,43 @@
+---
+description: Quy tắc làm việc cho dự án bán hàng Laravel Việt hóa
+alwaysApply: true
+---
+
+# Quy tắc làm việc cho dự án
+
+Áp dụng cho toàn bộ dự án này.
+
+## 1. Ngôn ngữ đặt tên
+- Tên file, thư mục, database, bảng, cột, route ưu tiên tiếng Việt không dấu.
+- Ưu tiên các tên như: `sanpham`, `danhmuc`, `donhang`, `khachhang`, `thongbao`, `caidatcuahang`.
+- Tránh dùng tên tiếng Anh nếu không thật sự cần thiết.
+
+## 2. Kiến trúc
+- Dùng Laravel theo hướng dễ mở rộng, tách rõ `Controller`, `Service`, `Repository` khi nghiệp vụ đủ lớn.
+- Giao diện tách riêng `admin` và `web`.
+- Blade là mặc định cho view.
+- UI phải sạch, thực tế, giống phong cách Sapo / KiotViet / Haravan / Shopify Admin / Shopee Seller.
+
+## 3. Giao diện
+- Nền sáng, sidebar gọn, header có tìm kiếm, chuông thông báo, tài khoản.
+- Bảng dữ liệu dễ đọc, modal thêm/sửa rõ ràng, badge trạng thái đẹp.
+- Hạn chế shadow mạnh, bo góc quá lố, gradient/neon, hiệu ứng màu mè.
+
+## 4. Realtime và thông báo
+- Ưu tiên thiết kế sẵn cho realtime: đơn mới, đổi trạng thái đơn, cảnh báo tồn kho.
+- Chỉ dùng Queue/Notification/Reverb/Pusher khi thật sự cần cho nghiệp vụ.
+
+## 5. Code style
+- Viết code rõ ràng, dễ bảo trì, ưu tiên đúng chuẩn Laravel nhưng vẫn Việt hóa theo yêu cầu dự án.
+- Đặt tên class theo convention Laravel, nhưng giữ tên nghiệp vụ tiếng Việt khi hợp lý.
+- Trước khi thêm file mới hoặc sửa lớn, luôn kiểm tra cấu trúc hiện có để tránh trùng lặp.
+
+## 6. Khi làm việc trong dự án
+- Luôn bám đúng lộ trình từng ngày, không tự ý nhảy bước.
+- Mỗi thay đổi nên đi kèm mục tiêu rõ ràng, file cần tạo/sửa, route, controller, model, migration, view nếu có.
+- Ưu tiên làm bản chạy được trước, rồi mới tối ưu dần.
+
+## 7. Chất lượng
+- Giữ code đơn giản, chuẩn, dễ học và dễ mở rộng cho người Việt mới làm dự án.
+- Nếu có nhiều cách làm, chọn cách dễ bảo trì và ít rủi ro nhất.
+- Không tạo nội dung thừa, không thêm quy ước ngoài phạm vi dự án nếu chưa cần.

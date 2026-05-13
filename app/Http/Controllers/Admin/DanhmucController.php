@@ -5,41 +5,32 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DanhmucRequest;
 use App\Models\Danhmuc;
+use App\Services\DanhmucService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class DanhmucController extends Controller
 {
+    public function __construct(
+        private DanhmucService $danhmucService
+    ) {
+        //
+    }
+
     public function index(Request $request)
     {
         $tukhoa = $request->input('tu_khoa');
 
-        $danhsachdanhmuc = Danhmuc::query()
-            ->when($tukhoa, function ($query) use ($tukhoa) {
-                $query->where('ten_danh_muc', 'like', '%' . $tukhoa . '%')
-                    ->orWhere('duong_dan', 'like', '%' . $tukhoa . '%')
-                    ->orWhere('mo_ta', 'like', '%' . $tukhoa . '%');
-            })
-            ->orderBy('thu_tu')
-            ->orderByDesc('id')
-            ->paginate(10)
-            ->withQueryString();
+        $danhsachdanhmuc = $this->danhmucService->layDanhSach($tukhoa);
 
         return view('admin.danhmuc.index', compact('danhsachdanhmuc', 'tukhoa'));
     }
 
     public function store(DanhmucRequest $request)
     {
-        $dulieu = $request->validated();
-
-        $dulieu['duong_dan'] = $this->taoDuongDan(
-            $dulieu['duong_dan'] ?? $dulieu['ten_danh_muc']
+        $this->danhmucService->taoDanhMuc(
+            $request->validated(),
+            $request->has('trang_thai')
         );
-
-        $dulieu['thu_tu'] = $dulieu['thu_tu'] ?? 0;
-        $dulieu['trang_thai'] = $request->has('trang_thai');
-
-        Danhmuc::create($dulieu);
 
         return redirect()
             ->route('admin.danhmuc.index')
@@ -48,16 +39,11 @@ class DanhmucController extends Controller
 
     public function update(DanhmucRequest $request, Danhmuc $danhmuc)
     {
-        $dulieu = $request->validated();
-
-        $dulieu['duong_dan'] = $this->taoDuongDan(
-            $dulieu['duong_dan'] ?? $dulieu['ten_danh_muc']
+        $this->danhmucService->capNhatDanhMuc(
+            $danhmuc,
+            $request->validated(),
+            $request->has('trang_thai')
         );
-
-        $dulieu['thu_tu'] = $dulieu['thu_tu'] ?? 0;
-        $dulieu['trang_thai'] = $request->has('trang_thai');
-
-        $danhmuc->update($dulieu);
 
         return redirect()
             ->route('admin.danhmuc.index')
@@ -66,7 +52,7 @@ class DanhmucController extends Controller
 
     public function destroy(Danhmuc $danhmuc)
     {
-        $danhmuc->delete();
+        $this->danhmucService->xoaDanhMuc($danhmuc);
 
         return redirect()
             ->route('admin.danhmuc.index')
@@ -75,17 +61,10 @@ class DanhmucController extends Controller
 
     public function doitrangthai(Danhmuc $danhmuc)
     {
-        $danhmuc->update([
-            'trang_thai' => !$danhmuc->trang_thai,
-        ]);
+        $this->danhmucService->doiTrangThai($danhmuc);
 
         return redirect()
             ->route('admin.danhmuc.index')
             ->with('thanhcong', 'Cập nhật trạng thái danh mục thành công.');
-    }
-
-    private function taoDuongDan(string $chuoi): string
-    {
-        return Str::slug($chuoi);
     }
 }
