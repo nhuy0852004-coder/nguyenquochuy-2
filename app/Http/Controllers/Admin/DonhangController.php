@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Donhang;
 use App\Services\ThongbaoService;
 use Illuminate\Http\Request;
+use App\Events\CapnhattrangthaidonhangEvent;
 
 class DonhangController extends Controller
 {
@@ -79,8 +80,16 @@ class DonhangController extends Controller
             'trang_thai_don_hang' => $trangThaiMoi,
         ]);
 
+        $donhang->refresh();
+
         if ($trangThaiMoi === Donhang::TRANG_THAI_DA_HUY && $trangThaiCu !== Donhang::TRANG_THAI_DA_HUY) {
             app(ThongbaoService::class)->taoThongBaoDonHangBiHuy($donhang);
+        }
+
+        try {
+            broadcast(new CapnhattrangthaidonhangEvent($donhang));
+        } catch (\Throwable $e) {
+            report($e);
         }
 
         return redirect()

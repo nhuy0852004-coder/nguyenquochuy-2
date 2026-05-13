@@ -1251,6 +1251,28 @@ body {
     }
 }
 
+.track-status-pulse {
+    animation: trackStatusPulse .8s ease;
+}
+
+@keyframes trackStatusPulse {
+    0% {
+        transform: scale(1);
+    }
+
+    35% {
+        transform: scale(1.08);
+    }
+
+    70% {
+        transform: scale(0.98);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
 .sanpham-bay-gio {
     position: fixed;
     z-index: 99999;

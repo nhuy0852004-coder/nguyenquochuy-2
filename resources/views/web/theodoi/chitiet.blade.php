@@ -19,7 +19,10 @@
                     <p>Đặt lúc {{ $donhang->created_at->format('d/m/Y H:i') }}</p>
                 </div>
 
-                <span class="track-status {{ $donhang->trangThaiDonHangClass() }}">
+                <span
+                    class="track-status {{ $donhang->trangThaiDonHangClass() }}"
+                    id="trangThaiDonHangBadge"
+                >
                     {{ $donhang->trangThaiDonHangText() }}
                 </span>
             </div>
@@ -29,7 +32,7 @@
                     <div class="track-panel mb-3">
                         <h3>Trạng thái đơn hàng</h3>
 
-                        <div class="order-timeline">
+                        <div class="order-timeline" id="timelineDonHang">
                             @foreach ($timeline as $item)
                                 <div class="timeline-item {{ $item['done'] ? 'done' : '' }} {{ $item['active'] ? 'active' : '' }}">
                                     <div class="timeline-dot">
@@ -164,3 +167,8 @@
         </section>
     </div>
 @endsection
+@push('scripts')
+    <script>
+        window.maDonHangTheoDoi = @json($donhang->ma_don_hang);
+    </script>
+@endpush

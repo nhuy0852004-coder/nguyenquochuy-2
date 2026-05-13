@@ -10,6 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="{{ asset('css/web.css') }}" rel="stylesheet">
+    @vite(['resources/js/app.js'])
 </head>
 
 <body>
@@ -155,6 +156,112 @@
         }
     });
 </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof window.maDonHangTheoDoi === 'undefined') {
+                return;
+            }
+
+            if (typeof window.Echo === 'undefined') {
+                console.warn('Laravel Echo chưa sẵn sàng ở website.');
+                return;
+            }
+
+            window.Echo.channel('donhang-' + window.maDonHangTheoDoi)
+                .listen('.cap-nhat-trang-thai', function (event) {
+                    console.log('Realtime trạng thái đơn hàng:', event);
+
+                    if (!event.don_hang) {
+                        return;
+                    }
+
+                    capNhatBadgeTrangThai(event.don_hang);
+                    capNhatTimelineDonHang(event.don_hang.timeline || []);
+                    hienThiToastWeb('Đơn hàng của bạn đã được cập nhật: ' + event.don_hang.trang_thai_text);
+                });
+
+            function capNhatBadgeTrangThai(donHang) {
+                const badge = document.getElementById('trangThaiDonHangBadge');
+
+                if (!badge) {
+                    return;
+                }
+
+                badge.className = 'track-status ' + donHang.trang_thai_class;
+                badge.textContent = donHang.trang_thai_text;
+                badge.classList.add('track-status-pulse');
+
+                setTimeout(function () {
+                    badge.classList.remove('track-status-pulse');
+                }, 800);
+            }
+
+            function capNhatTimelineDonHang(timeline) {
+                const timelineBox = document.getElementById('timelineDonHang');
+
+                if (!timelineBox || !Array.isArray(timeline)) {
+                    return;
+                }
+
+                timelineBox.innerHTML = '';
+
+                timeline.forEach(function (item) {
+                    const itemDiv = document.createElement('div');
+
+                    let className = 'timeline-item';
+
+                    if (item.done) {
+                        className += ' done';
+                    }
+
+                    if (item.active) {
+                        className += ' active';
+                    }
+
+                    itemDiv.className = className;
+
+                    itemDiv.innerHTML = `
+                        <div class="timeline-dot">
+                            ${item.done ? '<i class="bi bi-check"></i>' : ''}
+                        </div>
+
+                        <div>
+                            <div class="timeline-title">${escapeHtml(item.label)}</div>
+                            <div class="timeline-desc">${escapeHtml(item.mo_ta)}</div>
+                        </div>
+                    `;
+
+                    timelineBox.appendChild(itemDiv);
+                });
+            }
+
+            function hienThiToastWeb(noiDung) {
+                const toast = document.getElementById('webToast');
+                const text = document.getElementById('webToastText');
+
+                if (!toast || !text) {
+                    return;
+                }
+
+                text.textContent = noiDung;
+                toast.classList.add('show');
+
+                setTimeout(function () {
+                    toast.classList.remove('show');
+                }, 3500);
+            }
+
+            function escapeHtml(value) {
+                return String(value)
+                    .replaceAll('&', '&amp;')
+                    .replaceAll('<', '&lt;')
+                    .replaceAll('>', '&gt;')
+                    .replaceAll('"', '&quot;')
+                    .replaceAll("'", '&#039;');
+            }
+        });
+    </script>
 
     @stack('scripts')
 </body>
