@@ -27,7 +27,8 @@
             <span>Sản phẩm</span>
         </a>
 
-        <a href="#" class="sidebar-link">
+        <a href="{{ route('admin.donhang.index') }}"
+           class="sidebar-link {{ request()->routeIs('admin.donhang.*') ? 'active' : '' }}">
             <i class="bi bi-receipt"></i>
             <span>Đơn hàng</span>
         </a>

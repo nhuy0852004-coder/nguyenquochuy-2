@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\BangdieukhienController;
 use App\Http\Controllers\Admin\DanhmucController;
+use App\Http\Controllers\Admin\DonhangController;
 use App\Http\Controllers\Admin\SanphamController;
 use App\Http\Controllers\Web\GiohangController;
 use App\Http\Controllers\Web\SanphamController as WebSanphamController;
@@ -38,4 +39,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::put('/sanpham/{sanpham}', [SanphamController::class, 'update'])->name('sanpham.update');
     Route::delete('/sanpham/{sanpham}', [SanphamController::class, 'destroy'])->name('sanpham.destroy');
     Route::patch('/sanpham/{sanpham}/doi-trang-thai', [SanphamController::class, 'doitrangthai'])->name('sanpham.doitrangthai');
+
+    Route::get('/donhang', [DonhangController::class, 'index'])->name('donhang.index');
+    Route::get('/donhang/{donhang}', [DonhangController::class, 'chitiet'])->name('donhang.chitiet');
+    Route::patch('/donhang/{donhang}/cap-nhat-trang-thai', [DonhangController::class, 'capnhattrangthai'])->name('donhang.capnhattrangthai');
 });
