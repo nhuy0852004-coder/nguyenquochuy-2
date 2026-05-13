@@ -23,4 +23,9 @@ class Danhmuc extends Model
         'trang_thai' => 'boolean',
         'thu_tu' => 'integer',
     ];
+
+    public function sanpham()
+    {
+        return $this->hasMany(Sanpham::class, 'danhmuc_id');
+    }
 }

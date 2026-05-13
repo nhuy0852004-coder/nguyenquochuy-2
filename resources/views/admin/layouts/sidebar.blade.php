@@ -21,7 +21,8 @@
             <span>Danh mục</span>
         </a>
 
-        <a href="#" class="sidebar-link">
+        <a href="{{ route('admin.sanpham.index') }}"
+           class="sidebar-link {{ request()->routeIs('admin.sanpham.*') ? 'active' : '' }}">
             <i class="bi bi-box-seam"></i>
             <span>Sản phẩm</span>
         </a>

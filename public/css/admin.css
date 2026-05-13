@@ -560,3 +560,95 @@ body {
         flex-wrap: wrap;
     }
 }
+
+.anh-san-pham {
+    width: 54px;
+    height: 54px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid var(--mau-vien);
+    background: #f9fafb;
+}
+
+.anh-san-pham-rong {
+    width: 54px;
+    height: 54px;
+    border-radius: 10px;
+    border: 1px dashed var(--mau-vien);
+    background: #f9fafb;
+    display: grid;
+    place-items: center;
+    color: var(--mau-chu-phu);
+}
+
+.gia-goc {
+    color: var(--mau-chu-phu);
+    text-decoration: line-through;
+    font-size: 13px;
+}
+
+.gia-ban {
+    font-weight: 700;
+    color: #111827;
+}
+
+.gia-khuyen-mai {
+    font-weight: 800;
+    color: var(--mau-do);
+}
+
+.badge-hethang {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.badge-ganhet {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.badge-conhang {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.product-name-cell {
+    min-width: 220px;
+}
+
+.product-filter-grid {
+    display: grid;
+    grid-template-columns: 1fr 220px 180px auto;
+    gap: 12px;
+    align-items: center;
+}
+
+.product-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.product-form-grid .full {
+    grid-column: 1 / -1;
+}
+
+.preview-anh {
+    margin-top: 10px;
+    width: 90px;
+    height: 90px;
+    border-radius: 12px;
+    border: 1px solid var(--mau-vien);
+    object-fit: cover;
+    display: none;
+}
+
+@media (max-width: 992px) {
+    .product-filter-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .product-form-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\BangdieukhienController;
 use App\Http\Controllers\Admin\DanhmucController;
+use App\Http\Controllers\Admin\SanphamController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -22,4 +23,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/{danhmuc}', [DanhmucController::class, 'destroy'])->name('destroy');
         Route::patch('/{danhmuc}/doi-trang-thai', [DanhmucController::class, 'doitrangthai'])->name('doitrangthai');
     });
+
+    Route::get('/sanpham', [SanphamController::class, 'index'])->name('sanpham.index');
+    Route::post('/sanpham', [SanphamController::class, 'store'])->name('sanpham.store');
+    Route::put('/sanpham/{sanpham}', [SanphamController::class, 'update'])->name('sanpham.update');
+    Route::delete('/sanpham/{sanpham}', [SanphamController::class, 'destroy'])->name('sanpham.destroy');
+    Route::patch('/sanpham/{sanpham}/doi-trang-thai', [SanphamController::class, 'doitrangthai'])->name('sanpham.doitrangthai');
 });
