@@ -5,32 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('tieude', 'Trang chủ') - Bán Hàng Việt</title>
 
+    <meta name="description" content="@yield('mota', 'Website bán hàng thời trang chuẩn Việt Nam')">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{{ asset('css/web.css') }}" rel="stylesheet">
 </head>
 
-<body style="background:#f8fafc;">
-    <nav class="navbar navbar-expand-lg bg-white border-bottom">
-        <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="{{ route('web.trangchu') }}">
-                Bán Hàng Việt
-            </a>
-
-            <div class="d-flex gap-3">
-                <a href="#" class="text-decoration-none text-dark">Sản phẩm</a>
-                <a href="#" class="text-decoration-none text-dark">Giỏ hàng</a>
-                <a href="#" class="text-decoration-none text-dark">Theo dõi đơn</a>
-            </div>
-        </div>
-    </nav>
+<body>
+    @include('web.layouts.header')
 
     <main>
         @yield('noidung')
     </main>
 
-    <footer class="bg-white border-top mt-5 py-4">
-        <div class="container text-center text-muted">
-            © {{ date('Y') }} Bán Hàng Việt. Hệ thống bán hàng chuẩn Việt Nam.
-        </div>
-    </footer>
+    @include('web.layouts.footer')
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    @stack('scripts')
 </body>
 </html>
