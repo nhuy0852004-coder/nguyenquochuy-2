@@ -50,9 +50,13 @@
                     <i class="bi bi-receipt"></i>
                 </a>
 
-                <a href="#" class="web-icon-btn" title="Giỏ hàng">
+                @php
+    $soLuongGioHang = collect(session('giohang', []))->sum('so_luong');
+@endphp
+
+                <a href="{{ route('web.giohang.index') }}" class="web-icon-btn" id="nutGioHangHeader" title="Giỏ hàng">
                     <i class="bi bi-bag"></i>
-                    <span class="web-badge-count">0</span>
+                    <span class="web-badge-count" id="soLuongGioHang">{{ $soLuongGioHang }}</span>
                 </a>
             </div>
         </div>

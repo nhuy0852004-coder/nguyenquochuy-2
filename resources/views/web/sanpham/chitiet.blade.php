@@ -83,22 +83,20 @@
                                 </div>
                             </div>
 
-                            <div class="d-flex flex-wrap gap-2">
-                                @if ($sanpham->so_luong_ton > 0)
-                                    <button type="button" class="btn-web-primary">
-                                        <i class="bi bi-bag-plus"></i>
-                                        Thêm vào giỏ hàng
-                                    </button>
+                            <form action="{{ route('web.giohang.them', $sanpham) }}" method="POST" class="d-flex flex-wrap gap-2">
+                                @csrf
 
-                                    <button type="button" class="btn-web-light">
-                                        Mua ngay
-                                    </button>
-                                @else
-                                    <button type="button" class="btn-web-light" disabled>
-                                        Sản phẩm đã hết hàng
-                                    </button>
-                                @endif
-                            </div>
+                                <input type="hidden" name="so_luong" id="soLuongSubmit" value="1">
+
+                                <button type="submit" class="btn-web-primary">
+                                    <i class="bi bi-bag-plus"></i>
+                                    Thêm vào giỏ hàng
+                                </button>
+
+                                <button type="submit" class="btn-web-light" name="mua_ngay" value="1">
+                                    Mua ngay
+                                </button>
+                            </form>
 
                             <div class="mt-4 text-muted small">
                                 <div><i class="bi bi-truck me-2"></i>Giao hàng toàn quốc</div>
@@ -144,12 +142,22 @@
 
 @push('scripts')
     <script>
+        function capNhatSoLuongSubmit() {
+            const hienThi = document.getElementById('soLuong');
+            const submit = document.getElementById('soLuongSubmit');
+
+            if (hienThi && submit) {
+                submit.value = hienThi.value;
+            }
+        }
+
         function giamSoLuong() {
             const input = document.getElementById('soLuong');
             let soLuong = parseInt(input.value);
 
             if (soLuong > 1) {
                 input.value = soLuong - 1;
+                capNhatSoLuongSubmit();
             }
         }
 
@@ -159,6 +167,7 @@
 
             if (soLuong < tonKho) {
                 input.value = soLuong + 1;
+                capNhatSoLuongSubmit();
             }
         }
     </script>

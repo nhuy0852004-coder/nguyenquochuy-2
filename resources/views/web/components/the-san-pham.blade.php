@@ -1,7 +1,7 @@
-<div class="product-card">
+<div class="product-card sanpham-card-bay">
     <a href="{{ route('web.sanpham.chitiet', $sanpham->duong_dan) }}" class="product-image-link">
         @if ($sanpham->anh_dai_dien)
-            <img src="{{ asset('storage/' . $sanpham->anh_dai_dien) }}" alt="{{ $sanpham->ten_san_pham }}">
+            <img src="{{ asset('storage/' . $sanpham->anh_dai_dien) }}" alt="{{ $sanpham->ten_san_pham }}" class="anh-bay-gio">
         @else
             <div class="product-image-empty">
                 <i class="bi bi-image"></i>
@@ -39,10 +39,15 @@
 
         <div class="product-actions">
             @if ($sanpham->so_luong_ton > 0)
-                <button type="button" class="btn-add-cart">
-                    <i class="bi bi-bag-plus me-1"></i>
-                    Thêm giỏ
-                </button>
+                <form action="{{ route('web.giohang.them', $sanpham) }}" method="POST" class="flex-fill form-them-gio">
+                    @csrf
+                    <input type="hidden" name="so_luong" value="1">
+
+                    <button type="submit" class="btn-add-cart w-100">
+                        <i class="bi bi-bag-plus me-1"></i>
+                        Thêm giỏ
+                    </button>
+                </form>
             @else
                 <button type="button" class="btn-add-cart" disabled>
                     Hết hàng
