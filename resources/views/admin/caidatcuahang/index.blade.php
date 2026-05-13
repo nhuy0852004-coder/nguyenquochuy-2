@@ -154,7 +154,7 @@
                         <form
                             action="{{ route('admin.caidatcuahang.xoalogo') }}"
                             method="POST"
-                            onsubmit="return confirm('Bạn có chắc muốn xóa logo cửa hàng không?')"
+                            data-confirm="Bạn có chắc muốn xóa logo cửa hàng không?"
                         >
                             @csrf
                             @method('DELETE')

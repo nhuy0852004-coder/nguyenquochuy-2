@@ -127,7 +127,7 @@
                                 <form
                                     action="{{ route('admin.thongbao.xoa', $thongbao) }}"
                                     method="POST"
-                                    onsubmit="return confirm('Bạn có chắc muốn xóa thông báo này không?')"
+                                    data-confirm="Bạn có chắc muốn xóa thông báo này không?"
                                 >
                                     @csrf
                                     @method('DELETE')

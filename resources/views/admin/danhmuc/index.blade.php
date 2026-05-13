@@ -148,7 +148,7 @@
                                     <form
                                         action="{{ route('admin.danhmuc.destroy', $danhmuc) }}"
                                         method="POST"
-                                        onsubmit="return confirm('Bạn có chắc muốn xóa danh mục này không?')"
+                                        data-confirm="Bạn có chắc muốn xóa danh mục này không?"
                                     >
                                         @csrf
                                         @method('DELETE')

@@ -176,7 +176,7 @@
                                     <form
                                         action="{{ route('admin.sanpham.destroy', $sanpham) }}"
                                         method="POST"
-                                        onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này không?')"
+                                        data-confirm="Bạn có chắc muốn xóa sản phẩm này không?"
                                     >
                                         @csrf
                                         @method('DELETE')

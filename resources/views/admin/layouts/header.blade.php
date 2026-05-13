@@ -1,23 +1,33 @@
 @php
-    use App\Models\Thongbao;
-
-    $soluongThongBaoChuaDoc = Thongbao::query()
+    $soluongThongBaoChuaDoc = \App\Models\Thongbao::query()
         ->where('da_doc', false)
         ->count();
 
-    $thongBaoMoiNhat = Thongbao::query()
+    $thongBaoMoiNhat = \App\Models\Thongbao::query()
+        ->select('id', 'tieu_de', 'noi_dung', 'loai', 'duong_dan', 'da_doc', 'created_at')
         ->orderByDesc('id')
         ->limit(5)
         ->get();
 @endphp
 
 <header class="admin-header">
-    <div class="header-search">
-        <i class="bi bi-search"></i>
-        <input type="text" placeholder="Tìm kiếm đơn hàng, sản phẩm, khách hàng...">
+    <div class="header-left">
+        <button class="header-menu-btn" type="button" id="sidebarToggle">
+            <i class="bi bi-list"></i>
+        </button>
+
+        <div class="header-search">
+            <i class="bi bi-search"></i>
+            <input type="text" placeholder="Tìm kiếm đơn hàng, sản phẩm, khách hàng...">
+        </div>
     </div>
 
     <div class="header-actions">
+        <a href="{{ route('web.trangchu') }}" target="_blank" class="header-visit-store">
+            <i class="bi bi-box-arrow-up-right"></i>
+            <span>Xem website</span>
+        </a>
+
         <div class="dropdown">
             <button class="header-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-bell"></i>
@@ -79,11 +89,28 @@
             </div>
         </div>
 
-        <div class="header-user">
-            <div class="header-avatar">A</div>
-            <div class="d-none d-md-block">
-                <div class="fw-semibold">Quản trị viên</div>
-                <div class="text-muted small">admin@cuahang.vn</div>
+        <div class="header-user dropdown">
+            <button class="header-user-btn" type="button" data-bs-toggle="dropdown">
+                <div class="header-avatar">A</div>
+
+                <div class="d-none d-md-block text-start">
+                    <div class="fw-semibold">Quản trị viên</div>
+                    <div class="text-muted small">admin@cuahang.vn</div>
+                </div>
+
+                <i class="bi bi-chevron-down small text-muted d-none d-md-inline"></i>
+            </button>
+
+            <div class="dropdown-menu dropdown-menu-end">
+                <a href="{{ route('admin.caidatcuahang.index') }}" class="dropdown-item">
+                    <i class="bi bi-gear me-2"></i>
+                    Cài đặt cửa hàng
+                </a>
+
+                <a href="{{ route('web.trangchu') }}" target="_blank" class="dropdown-item">
+                    <i class="bi bi-box-arrow-up-right me-2"></i>
+                    Xem website
+                </a>
             </div>
         </div>
     </div>

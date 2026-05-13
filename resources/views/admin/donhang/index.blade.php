@@ -153,14 +153,3 @@
     </div>
 @endsection
 
-@push('scripts')
-    <script>
-        const toastThongBao = document.getElementById('toastThongBao');
-
-        if (toastThongBao) {
-            setTimeout(() => {
-                toastThongBao.style.display = 'none';
-            }, 3000);
-        }
-    </script>
-@endpush
