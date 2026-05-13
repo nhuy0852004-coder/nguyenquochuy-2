@@ -19,4 +19,30 @@ class Khachhang extends Model
     {
         return $this->hasMany(Donhang::class, 'khachhang_id');
     }
+
+    public function tongSoDon(): int
+    {
+        return $this->donhang()->count();
+    }
+
+    public function tongSoDonKhongHuy(): int
+    {
+        return $this->donhang()
+            ->where('trang_thai_don_hang', '!=', Donhang::TRANG_THAI_DA_HUY)
+            ->count();
+    }
+
+    public function tongTienDaMua(): int
+    {
+        return (int) $this->donhang()
+            ->where('trang_thai_don_hang', '!=', Donhang::TRANG_THAI_DA_HUY)
+            ->sum('tong_tien');
+    }
+
+    public function lanMuaGanNhat()
+    {
+        return $this->donhang()
+            ->latest('created_at')
+            ->first();
+    }
 }

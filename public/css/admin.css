@@ -995,3 +995,136 @@ body {
         min-width: auto;
     }
 }
+
+.customer-filter-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: center;
+}
+
+.customer-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.customer-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 220px;
+}
+
+.customer-detail-grid {
+    display: grid;
+    grid-template-columns: 0.8fr 1.4fr;
+    gap: 18px;
+}
+
+.customer-info-card {
+    background: #ffffff;
+    border: 1px solid var(--mau-vien);
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.customer-info-card h3 {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 14px;
+}
+
+.customer-big-avatar {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 28px;
+    font-weight: 900;
+    margin-bottom: 14px;
+}
+
+.customer-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 14px;
+    padding: 11px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.customer-line:last-child {
+    border-bottom: none;
+}
+
+.customer-line span {
+    color: var(--mau-chu-phu);
+}
+
+.customer-line strong {
+    text-align: right;
+}
+
+.customer-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 18px;
+}
+
+.customer-stat-card {
+    background: #ffffff;
+    border: 1px solid var(--mau-vien);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.customer-stat-label {
+    color: var(--mau-chu-phu);
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.customer-stat-value {
+    font-size: 24px;
+    font-weight: 850;
+}
+
+@media (max-width: 992px) {
+    .customer-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .customer-stat-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .customer-filter-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .customer-stat-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .customer-line {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .customer-line strong {
+        text-align: left;
+    }
+}

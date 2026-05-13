@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BangdieukhienController;
 use App\Http\Controllers\Admin\DanhmucController;
 use App\Http\Controllers\Admin\DonhangController;
+use App\Http\Controllers\Admin\KhachhangController;
 use App\Http\Controllers\Admin\SanphamController;
 use App\Http\Controllers\Admin\ThongbaoController;
 use App\Http\Controllers\Web\GiohangController;
@@ -49,6 +50,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/donhang', [DonhangController::class, 'index'])->name('donhang.index');
     Route::get('/donhang/{donhang}', [DonhangController::class, 'chitiet'])->name('donhang.chitiet');
     Route::patch('/donhang/{donhang}/cap-nhat-trang-thai', [DonhangController::class, 'capnhattrangthai'])->name('donhang.capnhattrangthai');
+
+    Route::get('/khachhang', [KhachhangController::class, 'index'])->name('khachhang.index');
+    Route::get('/khachhang/{khachhang}', [KhachhangController::class, 'chitiet'])->name('khachhang.chitiet');
 
     Route::get('/thongbao', [ThongbaoController::class, 'index'])->name('thongbao.index');
     Route::patch('/thongbao/danh-dau-tat-ca-da-doc', [ThongbaoController::class, 'danhDauTatCaDaDoc'])->name('thongbao.daudoc.tatca');

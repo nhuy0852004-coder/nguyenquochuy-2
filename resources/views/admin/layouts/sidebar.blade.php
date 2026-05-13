@@ -33,7 +33,8 @@
             <span>Đơn hàng</span>
         </a>
 
-        <a href="#" class="sidebar-link">
+        <a href="{{ route('admin.khachhang.index') }}"
+           class="sidebar-link {{ request()->routeIs('admin.khachhang.*') ? 'active' : '' }}">
             <i class="bi bi-people"></i>
             <span>Khách hàng</span>
         </a>
