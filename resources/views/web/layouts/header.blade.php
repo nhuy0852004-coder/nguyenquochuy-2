@@ -7,8 +7,13 @@
             </div>
 
             <div class="d-none d-md-flex gap-3">
-                <span><i class="bi bi-telephone me-1"></i> 0901 234 567</span>
-                <span><i class="bi bi-envelope me-1"></i> hotro@banhangviet.vn</span>
+                @if (!empty($caidatcuahang?->so_dien_thoai))
+                    <span><i class="bi bi-telephone me-1"></i> {{ $caidatcuahang->so_dien_thoai }}</span>
+                @endif
+
+                @if (!empty($caidatcuahang?->email))
+                    <span><i class="bi bi-envelope me-1"></i> {{ $caidatcuahang->email }}</span>
+                @endif
             </div>
         </div>
     </div>
@@ -16,8 +21,17 @@
     <div class="container">
         <div class="web-navbar d-flex align-items-center justify-content-between">
             <a href="{{ route('web.trangchu') }}" class="web-logo">
-                <i class="bi bi-shop me-1"></i>
-                Bán Hàng Việt
+                @if (!empty($caidatcuahang?->logo))
+                    <img
+                        src="{{ asset('storage/' . $caidatcuahang->logo) }}"
+                        alt="{{ $caidatcuahang->ten_cua_hang }}"
+                        style="height:34px; width:auto; margin-right:6px;"
+                    >
+                @else
+                    <i class="bi bi-shop me-1"></i>
+                @endif
+
+                {{ $caidatcuahang->ten_cua_hang ?? 'Bán Hàng Việt' }}
             </a>
 
             <nav class="web-menu">

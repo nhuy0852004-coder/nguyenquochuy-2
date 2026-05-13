@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('tieude', 'Trang chủ') - Bán Hàng Việt</title>
+    <title>@yield('tieude', 'Trang chủ') - {{ $caidatcuahang->ten_cua_hang ?? 'Bán Hàng Việt' }}</title>
 
     <meta name="description" content="@yield('mota', 'Website bán hàng thời trang chuẩn Việt Nam')">
 

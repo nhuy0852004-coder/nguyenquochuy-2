@@ -53,7 +53,8 @@
             <span>Báo cáo doanh thu</span>
         </a>
 
-        <a href="#" class="sidebar-link">
+        <a href="{{ route('admin.caidatcuahang.index') }}"
+           class="sidebar-link {{ request()->routeIs('admin.caidatcuahang.*') ? 'active' : '' }}">
             <i class="bi bi-gear"></i>
             <span>Cài đặt cửa hàng</span>
         </a>
