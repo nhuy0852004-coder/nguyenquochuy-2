@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\BangdieukhienController;
 use App\Http\Controllers\Admin\DanhmucController;
 use App\Http\Controllers\Admin\DonhangController;
 use App\Http\Controllers\Admin\KhachhangController;
+use App\Http\Controllers\Admin\BaocaoController;
 use App\Http\Controllers\Admin\SanphamController;
 use App\Http\Controllers\Admin\ThongbaoController;
 use App\Http\Controllers\Web\GiohangController;
@@ -53,6 +54,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/khachhang', [KhachhangController::class, 'index'])->name('khachhang.index');
     Route::get('/khachhang/{khachhang}', [KhachhangController::class, 'chitiet'])->name('khachhang.chitiet');
+
+    Route::get('/baocao', [BaocaoController::class, 'index'])->name('baocao.index');
 
     Route::get('/thongbao', [ThongbaoController::class, 'index'])->name('thongbao.index');
     Route::patch('/thongbao/danh-dau-tat-ca-da-doc', [ThongbaoController::class, 'danhDauTatCaDaDoc'])->name('thongbao.daudoc.tatca');

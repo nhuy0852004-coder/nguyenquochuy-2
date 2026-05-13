@@ -47,7 +47,8 @@
             <span>Thông báo</span>
         </a>
 
-        <a href="#" class="sidebar-link">
+        <a href="{{ route('admin.baocao.index') }}"
+           class="sidebar-link {{ request()->routeIs('admin.baocao.*') ? 'active' : '' }}">
             <i class="bi bi-bar-chart"></i>
             <span>Báo cáo doanh thu</span>
         </a>
