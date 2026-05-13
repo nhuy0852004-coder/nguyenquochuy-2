@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Events\DonhangMoiEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ThanhtoanRequest;
 use App\Models\Chitietdonhang;
@@ -106,7 +107,9 @@ class ThanhtoanController extends Controller
 
             $donhang->load('chitietdonhang.sanpham');
 
-            app(ThongbaoService::class)->taoThongBaoDonHangMoi($donhang);
+            $thongbaoDonHangMoi = app(ThongbaoService::class)->taoThongBaoDonHangMoi($donhang);
+
+            broadcast(new DonhangMoiEvent($donhang, $thongbaoDonHangMoi));
 
             foreach ($donhang->chitietdonhang as $chitiet) {
                 if ($chitiet->sanpham) {
