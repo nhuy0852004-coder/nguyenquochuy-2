@@ -17,6 +17,15 @@ class TrangchuController extends Controller
             ->limit(8)
             ->get();
 
+        $sanphamnoibat = Sanpham::query()
+            ->with('danhmuc')
+            ->where('trang_thai', true)
+            ->where('noi_bat', true)
+            ->where('so_luong_ton', '>', 0)
+            ->orderByDesc('id')
+            ->limit(8)
+            ->get();
+
         $sanphammoi = Sanpham::query()
             ->with('danhmuc')
             ->where('trang_thai', true)
@@ -35,20 +44,25 @@ class TrangchuController extends Controller
             ->limit(8)
             ->get();
 
-        $sanphamnoibat = Sanpham::query()
+        $sanphambanchay = Sanpham::query()
             ->with('danhmuc')
             ->where('trang_thai', true)
-            ->where('noi_bat', true)
             ->where('so_luong_ton', '>', 0)
-            ->orderByDesc('id')
+            ->withSum(['chitietdonhang as tong_da_ban' => function ($query) {
+                $query->whereHas('donhang', function ($q) {
+                    $q->where('trang_thai_don_hang', '!=', 'da_huy');
+                });
+            }], 'so_luong')
+            ->orderByDesc('tong_da_ban')
             ->limit(8)
             ->get();
 
         return view('web.trangchu.index', compact(
             'danhsachdanhmuc',
+            'sanphamnoibat',
             'sanphammoi',
             'sanphamkhuyenmai',
-            'sanphamnoibat'
+            'sanphambanchay'
         ));
     }
 }

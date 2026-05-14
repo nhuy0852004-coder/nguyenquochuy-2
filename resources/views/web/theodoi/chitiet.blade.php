@@ -13,9 +13,9 @@
         </div>
 
         <section class="section-block">
-            <div class="section-head">
+            <div class="track-detail-head">
                 <div>
-                    <h2>Đơn hàng {{ $donhang->ma_don_hang }}</h2>
+                    <h1>Đơn hàng {{ $donhang->ma_don_hang }}</h1>
                     <p>Đặt lúc {{ $donhang->created_at->format('d/m/Y H:i') }}</p>
                 </div>
 
@@ -27,12 +27,24 @@
                 </span>
             </div>
 
-            <div class="track-detail-grid">
-                <div>
-                    <div class="track-panel mb-3">
-                        <h3>Trạng thái đơn hàng</h3>
+            <div class="track-live-note">
+                <i class="bi bi-broadcast"></i>
+                <span>
+                    Trạng thái đơn hàng sẽ được cập nhật tự động nếu cửa hàng thay đổi trạng thái.
+                </span>
+            </div>
 
-                        <div class="order-timeline" id="timelineDonHang">
+            <div class="track-detail-grid track-detail-grid-pro">
+                <div>
+                    <div class="track-panel track-panel-pro mb-3">
+                        <div class="track-panel-head">
+                            <div>
+                                <h3>Trạng thái đơn hàng</h3>
+                                <p>Theo dõi tiến trình xử lý đơn hàng.</p>
+                            </div>
+                        </div>
+
+                        <div class="order-timeline order-timeline-pro" id="timelineDonHang">
                             @foreach ($timeline as $item)
                                 <div class="timeline-item {{ $item['done'] ? 'done' : '' }} {{ $item['active'] ? 'active' : '' }}">
                                     <div class="timeline-dot">
@@ -50,11 +62,16 @@
                         </div>
                     </div>
 
-                    <div class="track-panel">
-                        <h3>Sản phẩm trong đơn</h3>
+                    <div class="track-panel track-panel-pro">
+                        <div class="track-panel-head">
+                            <div>
+                                <h3>Sản phẩm trong đơn</h3>
+                                <p>{{ $donhang->chitietdonhang->sum('so_luong') }} sản phẩm trong đơn hàng.</p>
+                            </div>
+                        </div>
 
                         @foreach ($donhang->chitietdonhang as $chitiet)
-                            <div class="track-product">
+                            <div class="track-product track-product-pro">
                                 <div class="track-product-img">
                                     @if ($chitiet->anh_san_pham)
                                         <img src="{{ asset('storage/' . $chitiet->anh_san_pham) }}" alt="{{ $chitiet->ten_san_pham }}">
@@ -79,7 +96,7 @@
                             </div>
                         @endforeach
 
-                        <div class="track-total-box">
+                        <div class="track-total-box track-total-box-pro">
                             <div class="summary-line">
                                 <span>Tạm tính</span>
                                 <strong>{{ number_format($donhang->tam_tinh, 0, ',', '.') }} ₫</strong>
@@ -105,8 +122,13 @@
                 </div>
 
                 <div>
-                    <div class="track-panel mb-3">
-                        <h3>Thông tin người nhận</h3>
+                    <div class="track-panel track-panel-pro mb-3">
+                        <div class="track-panel-head">
+                            <div>
+                                <h3>Thông tin người nhận</h3>
+                                <p>Thông tin giao hàng của đơn.</p>
+                            </div>
+                        </div>
 
                         <div class="track-info-line">
                             <span>Họ tên</span>
@@ -134,8 +156,13 @@
                         </div>
                     </div>
 
-                    <div class="track-panel">
-                        <h3>Thông tin thanh toán</h3>
+                    <div class="track-panel track-panel-pro">
+                        <div class="track-panel-head">
+                            <div>
+                                <h3>Thanh toán</h3>
+                                <p>Thông tin thanh toán của đơn hàng.</p>
+                            </div>
+                        </div>
 
                         <div class="track-info-line">
                             <span>Phương thức</span>
@@ -153,6 +180,18 @@
                         </div>
                     </div>
 
+                    <div class="track-support-box">
+                        <h4>Cần hỗ trợ?</h4>
+                        <p>Liên hệ cửa hàng để được hỗ trợ nhanh về đơn hàng.</p>
+
+                        @if (!empty($caidatcuahang?->so_dien_thoai))
+                            <a href="tel:{{ $caidatcuahang->so_dien_thoai }}" class="btn-web-primary w-100">
+                                <i class="bi bi-telephone"></i>
+                                Gọi cửa hàng
+                            </a>
+                        @endif
+                    </div>
+
                     <div class="mt-3 d-grid gap-2">
                         <a href="{{ route('web.theodoi.index') }}" class="btn-web-light justify-content-center">
                             Tra cứu đơn khác
@@ -167,6 +206,7 @@
         </section>
     </div>
 @endsection
+
 @push('scripts')
     <script>
         window.maDonHangTheoDoi = @json($donhang->ma_don_hang);

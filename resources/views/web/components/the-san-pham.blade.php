@@ -5,6 +5,7 @@
                 src="{{ asset('storage/' . $sanpham->anh_dai_dien) }}"
                 alt="{{ $sanpham->ten_san_pham }}"
                 class="anh-bay-gio"
+                loading="lazy"
             >
         @else
             <div class="product-image-empty">
@@ -14,11 +15,21 @@
 
         <div class="product-badges">
             @if ($sanpham->gia_khuyen_mai)
-                <span class="product-sale-badge">Giảm giá</span>
+                @php
+                    $phanTramGiam = $sanpham->gia_ban > 0
+                        ? round((($sanpham->gia_ban - $sanpham->gia_khuyen_mai) / $sanpham->gia_ban) * 100)
+                        : 0;
+                @endphp
+
+                <span class="product-sale-badge">
+                    -{{ $phanTramGiam }}%
+                </span>
             @endif
 
             @if ($sanpham->noi_bat)
-                <span class="product-featured-badge">Nổi bật</span>
+                <span class="product-featured-badge">
+                    Nổi bật
+                </span>
             @endif
         </div>
     </a>
@@ -31,6 +42,12 @@
         <a href="{{ route('web.sanpham.chitiet', $sanpham->duong_dan) }}" class="product-name">
             {{ $sanpham->ten_san_pham }}
         </a>
+
+        @if (!empty($sanpham->mo_ta_ngan))
+            <div class="product-short-desc">
+                {{ Str::limit($sanpham->mo_ta_ngan, 70) }}
+            </div>
+        @endif
 
         <div class="product-price">
             @if ($sanpham->gia_khuyen_mai)
@@ -48,7 +65,7 @@
             @endif
         </div>
 
-        <div class="product-stock">
+        <div class="product-stock {{ $sanpham->so_luong_ton > 0 ? 'stock-in' : 'stock-out' }}">
             @if ($sanpham->so_luong_ton > 0)
                 <i class="bi bi-check-circle"></i>
                 Còn {{ $sanpham->so_luong_ton }} sản phẩm
@@ -70,7 +87,7 @@
                     </button>
                 </form>
             @else
-                <button type="button" class="btn-add-cart" disabled>
+                <button type="button" class="btn-add-cart w-100" disabled>
                     Hết hàng
                 </button>
             @endif

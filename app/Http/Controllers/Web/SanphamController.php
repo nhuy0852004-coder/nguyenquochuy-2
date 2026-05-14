@@ -5,15 +5,27 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Danhmuc;
 use App\Models\Sanpham;
+use App\Repositories\SanphamRepository;
 use Illuminate\Http\Request;
 
 class SanphamController extends Controller
 {
+    public function __construct(
+        private SanphamRepository $sanphamRepository
+    ) {
+        //
+    }
+
     public function index(Request $request)
     {
         $tukhoa = $request->input('tu_khoa');
         $danhmucSlug = $request->input('danh_muc');
         $sapxep = $request->input('sap_xep', 'moi_nhat');
+        $khoangGia = $request->input('khoang_gia');
+
+        $chiConHang = $request->boolean('con_hang');
+        $chiKhuyenMai = $request->boolean('khuyen_mai');
+        $chiNoiBat = $request->boolean('noi_bat');
 
         $danhsachdanhmuc = Danhmuc::query()
             ->where('trang_thai', true)
@@ -21,40 +33,27 @@ class SanphamController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        $danhsachsanpham = Sanpham::query()
-            ->with('danhmuc')
-            ->where('trang_thai', true)
-            ->when($tukhoa, function ($query) use ($tukhoa) {
-                $query->where(function ($q) use ($tukhoa) {
-                    $q->where('ten_san_pham', 'like', '%' . $tukhoa . '%')
-                        ->orWhere('mo_ta_ngan', 'like', '%' . $tukhoa . '%')
-                        ->orWhere('ma_san_pham', 'like', '%' . $tukhoa . '%');
-                });
-            })
-            ->when($danhmucSlug, function ($query) use ($danhmucSlug) {
-                $query->whereHas('danhmuc', function ($q) use ($danhmucSlug) {
-                    $q->where('duong_dan', $danhmucSlug);
-                });
-            });
-
-        if ($sapxep === 'gia_thap') {
-            $danhsachsanpham->orderByRaw('COALESCE(gia_khuyen_mai, gia_ban) ASC');
-        } elseif ($sapxep === 'gia_cao') {
-            $danhsachsanpham->orderByRaw('COALESCE(gia_khuyen_mai, gia_ban) DESC');
-        } else {
-            $danhsachsanpham->orderByDesc('id');
-        }
-
-        $danhsachsanpham = $danhsachsanpham
-            ->paginate(12)
-            ->withQueryString();
+        $danhsachsanpham = $this->sanphamRepository->timKiemSanPhamWebsite(
+            $tukhoa,
+            $danhmucSlug,
+            $sapxep,
+            $khoangGia,
+            $chiConHang,
+            $chiKhuyenMai,
+            $chiNoiBat,
+            12
+        );
 
         return view('web.sanpham.index', compact(
             'danhsachsanpham',
             'danhsachdanhmuc',
             'tukhoa',
             'danhmucSlug',
-            'sapxep'
+            'sapxep',
+            'khoangGia',
+            'chiConHang',
+            'chiKhuyenMai',
+            'chiNoiBat'
         ));
     }
 

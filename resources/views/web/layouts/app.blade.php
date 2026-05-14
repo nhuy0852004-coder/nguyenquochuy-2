@@ -7,7 +7,21 @@
 
     <title>@yield('tieude', 'Trang chủ') - {{ $caidatcuahang->ten_cua_hang ?? 'Bán Hàng Việt' }}</title>
 
-    <meta name="description" content="@yield('mota', 'Website bán hàng thời trang chuẩn Việt Nam')">
+    <meta name="description" content="@yield('mota', 'Website bán hàng thời trang chuẩn Việt Nam, giá tốt, giao hàng toàn quốc và thanh toán khi nhận hàng.')">
+    <meta name="robots" content="@yield('robots', 'index, follow')">
+
+    <link rel="canonical" href="@yield('canonical', url()->current())">
+
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:title" content="@yield('og_title', trim($__env->yieldContent('tieude', 'Trang chủ')) . ' - ' . ($caidatcuahang->ten_cua_hang ?? 'Bán Hàng Việt'))">
+    <meta property="og:description" content="@yield('og_description', trim($__env->yieldContent('mota', 'Website bán hàng thời trang chuẩn Việt Nam.')))">
+    <meta property="og:url" content="@yield('canonical', url()->current())">
+
+    @hasSection('og_image')
+        <meta property="og:image" content="@yield('og_image')">
+    @endif
+
+    <meta name="theme-color" content="#2563EB">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">

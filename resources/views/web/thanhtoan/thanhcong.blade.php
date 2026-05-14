@@ -5,7 +5,7 @@
 @section('noidung')
     <div class="container">
         <section class="section-block">
-            <div class="success-box">
+            <div class="success-box success-box-pro">
                 <div class="success-icon">
                     <i class="bi bi-check-circle"></i>
                 </div>
@@ -16,12 +16,12 @@
                     Cảm ơn bạn đã đặt hàng. Cửa hàng sẽ liên hệ xác nhận trong thời gian sớm nhất.
                 </p>
 
-                <div class="order-success-info">
-                    <div class="summary-line">
-                        <span>Mã đơn hàng</span>
-                        <strong>{{ $donhang->ma_don_hang }}</strong>
-                    </div>
+                <div class="success-order-code">
+                    <span>Mã đơn hàng</span>
+                    <strong>{{ $donhang->ma_don_hang }}</strong>
+                </div>
 
+                <div class="order-success-info">
                     <div class="summary-line">
                         <span>Người nhận</span>
                         <strong>{{ $donhang->ho_ten_nguoi_nhan }}</strong>
@@ -45,6 +45,23 @@
                     <div class="summary-total">
                         <span>Tổng tiền</span>
                         <strong>{{ number_format($donhang->tong_tien, 0, ',', '.') }} ₫</strong>
+                    </div>
+                </div>
+
+                <div class="success-next-steps">
+                    <div>
+                        <i class="bi bi-telephone"></i>
+                        Cửa hàng xác nhận đơn hàng
+                    </div>
+
+                    <div>
+                        <i class="bi bi-box-seam"></i>
+                        Chuẩn bị và đóng gói sản phẩm
+                    </div>
+
+                    <div>
+                        <i class="bi bi-truck"></i>
+                        Giao hàng đến địa chỉ của bạn
                     </div>
                 </div>
 

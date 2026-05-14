@@ -40,6 +40,12 @@ class GiohangController extends Controller
                 ]);
             }
 
+            if ($request->input('mua_ngay')) {
+                return redirect()
+                    ->route('web.thanhtoan.index')
+                    ->with('thanhcong', 'Sản phẩm đã được thêm vào giỏ hàng. Vui lòng hoàn tất thanh toán.');
+            }
+
             return redirect()
                 ->route('web.giohang.index')
                 ->with('thanhcong', 'Đã thêm sản phẩm vào giỏ hàng.');

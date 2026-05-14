@@ -13,12 +13,29 @@
         </div>
 
         <section class="section-block">
-            <div class="section-head">
+            <div class="checkout-page-head">
                 <div>
-                    <h2>Thanh toán</h2>
-                    <p>Nhập thông tin giao hàng và xác nhận đơn hàng.</p>
+                    <h1>Thanh toán</h1>
+                    <p>Hoàn tất thông tin giao hàng để cửa hàng xử lý đơn của bạn.</p>
                 </div>
+
+                <a href="{{ route('web.giohang.index') }}" class="btn-web-light">
+                    <i class="bi bi-arrow-left"></i>
+                    Quay lại giỏ hàng
+                </a>
             </div>
+
+            @if (session('loi'))
+                <div class="alert alert-danger border-0 rounded-3">
+                    {{ session('loi') }}
+                </div>
+            @endif
+
+            @if (session('thanhcong'))
+                <div class="alert alert-success border-0 rounded-3">
+                    {{ session('thanhcong') }}
+                </div>
+            @endif
 
             @if ($errors->any())
                 <div class="alert alert-danger border-0 rounded-3">
@@ -36,8 +53,16 @@
 
                 <div class="row g-4">
                     <div class="col-lg-7">
-                        <div class="checkout-box">
-                            <h5 class="fw-bold mb-3">Thông tin người nhận</h5>
+                        <div class="checkout-box checkout-box-pro">
+                            <div class="checkout-section-head">
+                                <div class="checkout-section-icon">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                                <div>
+                                    <h5>Thông tin người nhận</h5>
+                                    <p>Nhập chính xác thông tin để đơn hàng được giao đúng.</p>
+                                </div>
+                            </div>
 
                             <div class="row g-3">
                                 <div class="col-md-6">
@@ -82,7 +107,7 @@
                                         name="dia_chi"
                                         class="form-control"
                                         value="{{ old('dia_chi') }}"
-                                        placeholder="Ví dụ: Quận Ninh Kiều, Cần Thơ"
+                                        placeholder="Số nhà, phường/xã, quận/huyện, tỉnh/thành"
                                         required
                                     >
                                 </div>
@@ -99,10 +124,18 @@
                             </div>
                         </div>
 
-                        <div class="checkout-box mt-3">
-                            <h5 class="fw-bold mb-3">Phương thức thanh toán</h5>
+                        <div class="checkout-box checkout-box-pro mt-3">
+                            <div class="checkout-section-head">
+                                <div class="checkout-section-icon">
+                                    <i class="bi bi-credit-card"></i>
+                                </div>
+                                <div>
+                                    <h5>Phương thức thanh toán</h5>
+                                    <p>Chọn cách thanh toán phù hợp với bạn.</p>
+                                </div>
+                            </div>
 
-                            <label class="payment-option">
+                            <label class="payment-option payment-option-pro">
                                 <input
                                     type="radio"
                                     name="phuong_thuc_thanh_toan"
@@ -115,7 +148,7 @@
                                 </div>
                             </label>
 
-                            <label class="payment-option">
+                            <label class="payment-option payment-option-pro">
                                 <input
                                     type="radio"
                                     name="phuong_thuc_thanh_toan"
@@ -129,16 +162,42 @@
                                     </div>
                                 </div>
                             </label>
+
+                            <div class="bank-transfer-box">
+                                <div class="fw-bold mb-2">
+                                    <i class="bi bi-bank me-1"></i>
+                                    Thông tin chuyển khoản demo
+                                </div>
+
+                                <div class="bank-line">
+                                    <span>Ngân hàng</span>
+                                    <strong>VCB - Vietcombank</strong>
+                                </div>
+
+                                <div class="bank-line">
+                                    <span>Số tài khoản</span>
+                                    <strong>0123456789</strong>
+                                </div>
+
+                                <div class="bank-line">
+                                    <span>Chủ tài khoản</span>
+                                    <strong>{{ $caidatcuahang->ten_cua_hang ?? 'BAN HANG VIET' }}</strong>
+                                </div>
+
+                                <div class="text-muted small mt-2">
+                                    Nội dung chuyển khoản: Số điện thoại đặt hàng hoặc mã đơn sau khi đặt.
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col-lg-5">
-                        <div class="cart-summary">
+                        <div class="cart-summary checkout-summary-pro">
                             <h5 class="fw-bold mb-3">Đơn hàng của bạn</h5>
 
                             <div class="checkout-products">
                                 @foreach ($giohang as $item)
-                                    <div class="checkout-product">
+                                    <div class="checkout-product checkout-product-pro">
                                         <div class="checkout-product-img">
                                             @if ($item['anh_dai_dien'])
                                                 <img src="{{ asset('storage/' . $item['anh_dai_dien']) }}" alt="{{ $item['ten_san_pham'] }}">
@@ -188,6 +247,18 @@
                             <a href="{{ route('web.giohang.index') }}" class="btn-web-light w-100 justify-content-center mt-2">
                                 Quay lại giỏ hàng
                             </a>
+
+                            <div class="cart-summary-note">
+                                <div>
+                                    <i class="bi bi-lock"></i>
+                                    Thông tin của bạn được dùng để xử lý đơn hàng.
+                                </div>
+
+                                <div>
+                                    <i class="bi bi-truck"></i>
+                                    Cửa hàng sẽ liên hệ xác nhận trước khi giao.
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

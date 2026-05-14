@@ -52,10 +52,34 @@ class SanphamRepository
             ->get();
     }
 
-    public function timKiemSanPhamWebsite(?string $tukhoa, ?string $danhmucSlug, string $sapxep = 'moi_nhat', int $limit = 12)
-    {
+    public function timKiemSanPhamWebsite(
+        ?string $tukhoa,
+        ?string $danhmucSlug,
+        string $sapxep = 'moi_nhat',
+        ?string $khoangGia = null,
+        bool $chiConHang = false,
+        bool $chiKhuyenMai = false,
+        bool $chiNoiBat = false,
+        int $limit = 12
+    ) {
         $query = Sanpham::query()
-            ->with('danhmuc')
+            ->select(
+                'id',
+                'danhmuc_id',
+                'ten_san_pham',
+                'duong_dan',
+                'ma_san_pham',
+                'gia_ban',
+                'gia_khuyen_mai',
+                'so_luong_ton',
+                'muc_canh_bao_ton',
+                'anh_dai_dien',
+                'mo_ta_ngan',
+                'trang_thai',
+                'noi_bat',
+                'created_at'
+            )
+            ->with('danhmuc:id,ten_danh_muc,duong_dan')
             ->where('trang_thai', true)
             ->when($tukhoa, function ($query) use ($tukhoa) {
                 $query->where(function ($q) use ($tukhoa) {
@@ -68,12 +92,42 @@ class SanphamRepository
                 $query->whereHas('danhmuc', function ($q) use ($danhmucSlug) {
                     $q->where('duong_dan', $danhmucSlug);
                 });
+            })
+            ->when($chiConHang, function ($query) {
+                $query->where('so_luong_ton', '>', 0);
+            })
+            ->when($chiKhuyenMai, function ($query) {
+                $query->whereNotNull('gia_khuyen_mai')
+                    ->where('gia_khuyen_mai', '>', 0);
+            })
+            ->when($chiNoiBat, function ($query) {
+                $query->where('noi_bat', true);
             });
 
+        if ($khoangGia) {
+            $query->where(function ($q) use ($khoangGia) {
+                if ($khoangGia === 'duoi_200') {
+                    $q->whereRaw('IFNULL(gia_khuyen_mai, gia_ban) < 200000');
+                }
+
+                if ($khoangGia === '200_500') {
+                    $q->whereRaw('IFNULL(gia_khuyen_mai, gia_ban) BETWEEN 200000 AND 500000');
+                }
+
+                if ($khoangGia === '500_1000') {
+                    $q->whereRaw('IFNULL(gia_khuyen_mai, gia_ban) BETWEEN 500000 AND 1000000');
+                }
+
+                if ($khoangGia === 'tren_1000') {
+                    $q->whereRaw('IFNULL(gia_khuyen_mai, gia_ban) > 1000000');
+                }
+            });
+        }
+
         if ($sapxep === 'gia_thap') {
-            $query->orderByRaw('COALESCE(gia_khuyen_mai, gia_ban) ASC');
+            $query->orderByRaw('IFNULL(gia_khuyen_mai, gia_ban) ASC');
         } elseif ($sapxep === 'gia_cao') {
-            $query->orderByRaw('COALESCE(gia_khuyen_mai, gia_ban) DESC');
+            $query->orderByRaw('IFNULL(gia_khuyen_mai, gia_ban) DESC');
         } else {
             $query->orderByDesc('id');
         }

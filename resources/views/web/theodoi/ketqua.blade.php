@@ -13,9 +13,9 @@
         </div>
 
         <section class="section-block">
-            <div class="section-head">
+            <div class="track-result-head">
                 <div>
-                    <h2>Kết quả tra cứu</h2>
+                    <h1>Kết quả tra cứu</h1>
                     <p>
                         Từ khóa:
                         <strong>{{ $tukhoa }}</strong>
@@ -23,14 +23,27 @@
                 </div>
 
                 <a href="{{ route('web.theodoi.index') }}" class="btn-web-light">
+                    <i class="bi bi-arrow-left"></i>
                     Tra cứu lại
                 </a>
             </div>
 
             @if ($danhsachdonhang->count())
+                <div class="track-result-summary">
+                    <div>
+                        <strong>{{ $danhsachdonhang->count() }}</strong>
+                        <span>Đơn hàng tìm thấy</span>
+                    </div>
+
+                    <div>
+                        <strong>{{ number_format($danhsachdonhang->sum('tong_tien'), 0, ',', '.') }} ₫</strong>
+                        <span>Tổng giá trị đơn</span>
+                    </div>
+                </div>
+
                 <div class="track-result-list">
                     @foreach ($danhsachdonhang as $donhang)
-                        <div class="track-order-card">
+                        <div class="track-order-card track-order-card-pro">
                             <div class="track-order-main">
                                 <div>
                                     <div class="track-order-code">{{ $donhang->ma_don_hang }}</div>
@@ -44,7 +57,7 @@
                                 </span>
                             </div>
 
-                            <div class="track-order-info">
+                            <div class="track-order-info track-order-info-pro">
                                 <div>
                                     <span>Người nhận</span>
                                     <strong>{{ $donhang->ho_ten_nguoi_nhan }}</strong>
@@ -56,7 +69,7 @@
                                 </div>
 
                                 <div>
-                                    <span>Số sản phẩm</span>
+                                    <span>Sản phẩm</span>
                                     <strong>{{ $donhang->chitietdonhang->sum('so_luong') }}</strong>
                                 </div>
 
@@ -68,8 +81,19 @@
                                 </div>
                             </div>
 
+                            <div class="track-order-preview-products">
+                                @foreach ($donhang->chitietdonhang->take(3) as $chitiet)
+                                    <span>{{ $chitiet->ten_san_pham }} x{{ $chitiet->so_luong }}</span>
+                                @endforeach
+
+                                @if ($donhang->chitietdonhang->count() > 3)
+                                    <span>+{{ $donhang->chitietdonhang->count() - 3 }} sản phẩm khác</span>
+                                @endif
+                            </div>
+
                             <div class="track-order-actions">
                                 <a href="{{ route('web.theodoi.chitiet', $donhang->ma_don_hang) }}" class="btn-web-primary">
+                                    <i class="bi bi-eye"></i>
                                     Xem chi tiết
                                 </a>
                             </div>
@@ -77,7 +101,7 @@
                     @endforeach
                 </div>
             @else
-                <div class="empty-web">
+                <div class="empty-web track-empty-pro">
                     <div class="empty-web-icon">
                         <i class="bi bi-search"></i>
                     </div>

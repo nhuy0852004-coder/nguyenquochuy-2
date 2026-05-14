@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const mobileOverlay = document.getElementById('webMobileOverlay');
     const searchMobileBtn = document.getElementById('webSearchMobileBtn');
     const mobileSearch = document.getElementById('webMobileSearch');
+    const productFilterToggle = document.getElementById('productFilterToggle');
+    const productSidebarFilter = document.getElementById('productSidebarFilter');
+    const productFilterClose = document.getElementById('productFilterClose');
     const pageLoading = document.getElementById('webPageLoading');
 
     if (mobileMenuBtn) {
@@ -37,6 +40,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 mobileSearch.querySelector('input')?.focus();
             }
         });
+    }
+
+    if (productFilterToggle) {
+        productFilterToggle.addEventListener('click', function () {
+            productSidebarFilter?.classList.add('show');
+            mobileOverlay?.classList.add('show');
+            document.body.classList.add('web-menu-open');
+        });
+    }
+
+    if (productFilterClose) {
+        productFilterClose.addEventListener('click', dongProductFilter);
+    }
+
+    if (mobileOverlay) {
+        mobileOverlay.addEventListener('click', dongProductFilter);
+    }
+
+    function dongProductFilter() {
+        productSidebarFilter?.classList.remove('show');
+        mobileOverlay?.classList.remove('show');
+        document.body.classList.remove('web-menu-open');
     }
 
     document.querySelectorAll('.form-them-gio').forEach(function (form) {
