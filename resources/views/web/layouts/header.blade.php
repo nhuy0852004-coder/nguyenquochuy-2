@@ -6,18 +6,36 @@
     <div class="web-topbar">
         <div class="container">
             <div class="web-topbar-inner">
-                <div>
-                    <i class="bi bi-truck me-1"></i>
-                    Giao hàng toàn quốc - Thanh toán khi nhận hàng
+                <div class="web-topbar-left">
+                    <span>
+                        <i class="bi bi-truck me-1"></i>
+                        Giao hàng toàn quốc
+                    </span>
+
+                    <span class="d-none d-lg-inline">
+                        <i class="bi bi-arrow-repeat me-1"></i>
+                        Đổi trả trong 7 ngày
+                    </span>
+
+                    <span class="d-none d-xl-inline">
+                        <i class="bi bi-cash-coin me-1"></i>
+                        Thanh toán khi nhận hàng
+                    </span>
                 </div>
 
                 <div class="web-topbar-contact">
                     @if (!empty($caidatcuahang?->so_dien_thoai))
-                        <span><i class="bi bi-telephone me-1"></i>{{ $caidatcuahang->so_dien_thoai }}</span>
+                        <span>
+                            <i class="bi bi-telephone me-1"></i>
+                            {{ $caidatcuahang->so_dien_thoai }}
+                        </span>
                     @endif
 
                     @if (!empty($caidatcuahang?->email))
-                        <span><i class="bi bi-envelope me-1"></i>{{ $caidatcuahang->email }}</span>
+                        <span class="d-none d-md-inline">
+                            <i class="bi bi-envelope me-1"></i>
+                            {{ $caidatcuahang->email }}
+                        </span>
                     @endif
                 </div>
             </div>
@@ -26,7 +44,7 @@
 
     <div class="container">
         <div class="web-navbar">
-            <button class="web-mobile-menu-btn" type="button" id="webMobileMenuBtn">
+            <button class="web-mobile-menu-btn" type="button" id="webMobileMenuBtn" aria-label="Mở menu">
                 <i class="bi bi-list"></i>
             </button>
 
@@ -64,8 +82,13 @@
             </nav>
 
             <form action="{{ route('web.sanpham.index') }}" method="GET" class="web-search">
-                <input type="text" name="tu_khoa" placeholder="Tìm sản phẩm..." value="{{ request('tu_khoa') }}">
-                <button type="submit">
+                <input
+                    type="text"
+                    name="tu_khoa"
+                    placeholder="Tìm áo, quần, giày, túi xách..."
+                    value="{{ request('tu_khoa') }}"
+                >
+                <button type="submit" aria-label="Tìm kiếm">
                     <i class="bi bi-search"></i>
                 </button>
             </form>
@@ -87,7 +110,12 @@
         </div>
 
         <form action="{{ route('web.sanpham.index') }}" method="GET" class="web-mobile-search" id="webMobileSearch">
-            <input type="text" name="tu_khoa" placeholder="Tìm sản phẩm bạn cần..." value="{{ request('tu_khoa') }}">
+            <input
+                type="text"
+                name="tu_khoa"
+                placeholder="Tìm sản phẩm bạn cần..."
+                value="{{ request('tu_khoa') }}"
+            >
             <button type="submit">
                 <i class="bi bi-search"></i>
             </button>
@@ -96,9 +124,12 @@
 
     <div class="web-mobile-menu" id="webMobileMenu">
         <div class="web-mobile-menu-head">
-            <strong>Menu</strong>
+            <div>
+                <strong>Menu</strong>
+                <div class="text-muted small">Điều hướng nhanh</div>
+            </div>
 
-            <button type="button" id="webMobileMenuClose">
+            <button type="button" id="webMobileMenuClose" aria-label="Đóng menu">
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
@@ -122,6 +153,9 @@
             <a href="{{ route('web.giohang.index') }}">
                 <i class="bi bi-cart"></i>
                 Giỏ hàng
+                @if ($soLuongGioHang > 0)
+                    <span class="mobile-menu-count">{{ $soLuongGioHang }}</span>
+                @endif
             </a>
 
             <a href="{{ route('web.theodoi.index') }}">
@@ -129,5 +163,21 @@
                 Theo dõi đơn hàng
             </a>
         </nav>
+
+        <div class="web-mobile-menu-contact">
+            @if (!empty($caidatcuahang?->so_dien_thoai))
+                <div>
+                    <i class="bi bi-telephone"></i>
+                    {{ $caidatcuahang->so_dien_thoai }}
+                </div>
+            @endif
+
+            @if (!empty($caidatcuahang?->dia_chi))
+                <div>
+                    <i class="bi bi-geo-alt"></i>
+                    {{ $caidatcuahang->dia_chi }}
+                </div>
+            @endif
+        </div>
     </div>
 </header>

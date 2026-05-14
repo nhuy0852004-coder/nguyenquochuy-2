@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
         mobileMenuBtn.addEventListener('click', function () {
             mobileMenu?.classList.add('show');
             mobileOverlay?.classList.add('show');
+            document.body.classList.add('web-menu-open');
         });
     }
 
@@ -25,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function dongMobileMenu() {
         mobileMenu?.classList.remove('show');
         mobileOverlay?.classList.remove('show');
+        document.body.classList.remove('web-menu-open');
     }
 
     if (searchMobileBtn) {
@@ -79,14 +81,14 @@ document.addEventListener('DOMContentLoaded', function () {
                                 }, 450);
                             }
 
-                            hienThiToast(data.message || 'Đã thêm sản phẩm vào giỏ hàng.');
+                            hienThiToast(data.message || 'Đã thêm sản phẩm vào giỏ hàng.', 'success');
                         }, 520);
                     } else {
-                        hienThiToast(data.message || 'Không thể thêm sản phẩm vào giỏ hàng.');
+                        hienThiToast(data.message || 'Không thể thêm sản phẩm vào giỏ hàng.', 'error');
                     }
                 })
                 .catch(function () {
-                    hienThiToast('Có lỗi xảy ra, vui lòng thử lại.');
+                    hienThiToast('Có lỗi xảy ra, vui lòng thử lại.', 'error');
                 })
                 .finally(function () {
                     setTimeout(function () {
@@ -97,7 +99,43 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    document.querySelectorAll('form:not(.form-them-gio)').forEach(function (form) {
+    document.querySelectorAll('form[data-confirm]').forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const title = form.dataset.confirmTitle || 'Xác nhận thao tác';
+            const text = form.dataset.confirm || 'Bạn có chắc muốn thực hiện thao tác này không?';
+            const icon = form.dataset.confirmIcon || 'warning';
+            const confirmText = form.dataset.confirmButton || 'Đồng ý';
+            const cancelText = form.dataset.cancelButton || 'Hủy';
+
+            Swal.fire({
+                title: title,
+                text: text,
+                icon: icon,
+                showCancelButton: true,
+                confirmButtonText: confirmText,
+                cancelButtonText: cancelText,
+                reverseButtons: true,
+                focusCancel: true,
+                customClass: {
+                    popup: 'swal-web-popup',
+                    title: 'swal-web-title',
+                    htmlContainer: 'swal-web-text',
+                    confirmButton: 'swal-web-confirm',
+                    cancelButton: 'swal-web-cancel'
+                },
+                buttonsStyling: false
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    form.removeAttribute('data-confirm');
+                    form.submit();
+                }
+            });
+        });
+    });
+
+    document.querySelectorAll('form:not(.form-them-gio):not([data-confirm])').forEach(function (form) {
         form.addEventListener('submit', function () {
             if (form.dataset.skipLoading === 'true') {
                 return;
@@ -159,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 650);
     }
 
-    function hienThiToast(noiDung) {
+    function hienThiToast(noiDung, type = 'success') {
         const toast = document.getElementById('webToast');
         const text = document.getElementById('webToastText');
 
@@ -168,6 +206,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         text.textContent = noiDung;
+        toast.classList.remove('is-error', 'is-success');
+        toast.classList.add(type === 'error' ? 'is-error' : 'is-success');
         toast.classList.add('show');
 
         setTimeout(function () {
