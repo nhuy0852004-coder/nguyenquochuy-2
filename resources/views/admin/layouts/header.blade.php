@@ -91,11 +91,17 @@
 
         <div class="header-user dropdown">
             <button class="header-user-btn" type="button" data-bs-toggle="dropdown">
-                <div class="header-avatar">A</div>
+                @php
+                    $adminDangNhap = auth()->user();
+                @endphp
+
+                <div class="header-avatar">
+                    {{ mb_substr($adminDangNhap?->ho_ten ?? 'A', 0, 1) }}
+                </div>
 
                 <div class="d-none d-md-block text-start">
-                    <div class="fw-semibold">Quản trị viên</div>
-                    <div class="text-muted small">admin@cuahang.vn</div>
+                    <div class="fw-semibold">{{ $adminDangNhap?->ho_ten ?? 'Quản trị viên' }}</div>
+                    <div class="text-muted small">{{ $adminDangNhap?->email ?? 'admin@cuahang.vn' }}</div>
                 </div>
 
                 <i class="bi bi-chevron-down small text-muted d-none d-md-inline"></i>
@@ -111,6 +117,17 @@
                     <i class="bi bi-box-arrow-up-right me-2"></i>
                     Xem website
                 </a>
+
+                <div class="dropdown-divider"></div>
+
+                <form action="{{ route('admin.dangxuat') }}" method="POST">
+                    @csrf
+
+                    <button type="submit" class="dropdown-item text-danger">
+                        <i class="bi bi-box-arrow-right me-2"></i>
+                        Đăng xuất
+                    </button>
+                </form>
             </div>
         </div>
     </div>

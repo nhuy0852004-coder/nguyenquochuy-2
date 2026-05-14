@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\BaocaoController;
 use App\Http\Controllers\Admin\CaidatcuahangController;
 use App\Http\Controllers\Admin\SanphamController;
 use App\Http\Controllers\Admin\ThongbaoController;
+use App\Http\Controllers\Admin\XacthucController;
 use App\Http\Controllers\Web\GiohangController;
 use App\Http\Controllers\Web\SanphamController as WebSanphamController;
 use App\Http\Controllers\Web\ThanhtoanController;
@@ -34,7 +35,14 @@ Route::get('/theo-doi-don-hang', [TheodoiController::class, 'index'])->name('web
 Route::post('/theo-doi-don-hang/tim-kiem', [TheodoiController::class, 'timkiem'])->name('web.theodoi.timkiem');
 Route::get('/theo-doi-don-hang/{madonhang}', [TheodoiController::class, 'chitiet'])->name('web.theodoi.chitiet');
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::get('/admin/dang-nhap', [XacthucController::class, 'hienThiDangNhap'])->name('admin.dangnhap');
+Route::post('/admin/dang-nhap', [XacthucController::class, 'dangNhap'])->name('admin.xuly.dangnhap');
+Route::post('/admin/dang-xuat', [XacthucController::class, 'dangXuat'])->name('admin.dangxuat');
+
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware('kiemtraadmin')
+    ->group(function () {
     Route::get('/', [BangdieukhienController::class, 'index'])->name('bangdieukhien');
 
     Route::get('/danhmuc', [DanhmucController::class, 'index'])->name('danhmuc.index');
@@ -66,4 +74,4 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::patch('/thongbao/danh-dau-tat-ca-da-doc', [ThongbaoController::class, 'danhDauTatCaDaDoc'])->name('thongbao.daudoc.tatca');
     Route::patch('/thongbao/{thongbao}/da-doc', [ThongbaoController::class, 'danhDauDaDoc'])->name('thongbao.dadoc');
     Route::delete('/thongbao/{thongbao}', [ThongbaoController::class, 'xoa'])->name('thongbao.xoa');
-});
+    });
