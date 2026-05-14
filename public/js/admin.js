@@ -52,9 +52,14 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('form').forEach(function (form) {
         form.addEventListener('submit', function () {
             const skipLoading = form.dataset.skipLoading === 'true';
+            const hasConfirm = form.hasAttribute('data-confirm');
 
-            if (!skipLoading && pageLoading) {
+            if (!skipLoading && !hasConfirm && pageLoading) {
                 pageLoading.classList.add('show');
+            }
+
+            if (hasConfirm) {
+                return;
             }
 
             form.querySelectorAll('button[type="submit"]').forEach(function (button) {
@@ -75,23 +80,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll('form[data-confirm]').forEach(function (form) {
         form.addEventListener('submit', function (event) {
-            const message = form.dataset.confirm || 'Bạn có chắc muốn thực hiện thao tác này không?';
+            event.preventDefault();
 
-            if (!confirm(message)) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-        });
-    });
+            const title = form.dataset.confirmTitle || 'Xác nhận thao tác';
+            const text = form.dataset.confirm || 'Bạn có chắc muốn thực hiện thao tác này không?';
+            const icon = form.dataset.confirmIcon || 'warning';
+            const confirmText = form.dataset.confirmButton || 'Đồng ý';
+            const cancelText = form.dataset.cancelButton || 'Hủy';
 
-    document.querySelectorAll('[data-confirm]:not(form)').forEach(function (element) {
-        element.addEventListener('click', function (event) {
-            const message = element.dataset.confirm || 'Bạn có chắc muốn thực hiện thao tác này không?';
-
-            if (!confirm(message)) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
+            Swal.fire({
+                title: title,
+                text: text,
+                icon: icon,
+                showCancelButton: true,
+                confirmButtonText: confirmText,
+                cancelButtonText: cancelText,
+                reverseButtons: true,
+                focusCancel: true,
+                customClass: {
+                    popup: 'swal-admin-popup',
+                    title: 'swal-admin-title',
+                    htmlContainer: 'swal-admin-text',
+                    confirmButton: 'swal-admin-confirm',
+                    cancelButton: 'swal-admin-cancel'
+                },
+                buttonsStyling: false
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    form.removeAttribute('data-confirm');
+                    form.submit();
+                }
+            });
         });
     });
 

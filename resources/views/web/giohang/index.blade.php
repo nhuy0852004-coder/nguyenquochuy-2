@@ -87,7 +87,6 @@
                                             type="submit"
                                             form="formXoa{{ $item['sanpham_id'] }}"
                                             class="cart-remove"
-                                            onclick="return confirm('Xóa sản phẩm này khỏi giỏ hàng?')"
                                         >
                                             <i class="bi bi-trash"></i>
                                         </button>
@@ -109,7 +108,16 @@
                         </form>
 
                         @foreach ($giohang as $item)
-                            <form id="formXoa{{ $item['sanpham_id'] }}" action="{{ route('web.giohang.xoa', $item['sanpham_id']) }}" method="POST" class="d-none">
+                            <form
+                                id="formXoa{{ $item['sanpham_id'] }}"
+                                action="{{ route('web.giohang.xoa', $item['sanpham_id']) }}"
+                                method="POST"
+                                class="d-none"
+                                data-confirm-title="Xóa sản phẩm?"
+                                data-confirm="Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng không?"
+                                data-confirm-button="Xóa"
+                                data-confirm-icon="warning"
+                            >
                                 @csrf
                                 @method('DELETE')
                             </form>
@@ -139,15 +147,19 @@
                                 Thanh toán
                             </a>
 
-                            <form action="{{ route('web.giohang.xoatatca') }}" method="POST" class="mt-2">
+                            <form
+                                action="{{ route('web.giohang.xoatatca') }}"
+                                method="POST"
+                                class="mt-2"
+                                data-confirm-title="Xóa toàn bộ giỏ hàng?"
+                                data-confirm="Tất cả sản phẩm trong giỏ hàng sẽ bị xóa."
+                                data-confirm-button="Xóa tất cả"
+                                data-confirm-icon="warning"
+                            >
                                 @csrf
                                 @method('DELETE')
 
-                                <button
-                                    type="submit"
-                                    class="btn-web-light w-100 justify-content-center"
-                                    onclick="return confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?')"
-                                >
+                                <button type="submit" class="btn-web-light w-100 justify-content-center">
                                     Xóa toàn bộ giỏ hàng
                                 </button>
                             </form>

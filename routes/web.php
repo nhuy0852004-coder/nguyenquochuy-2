@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\CaidatcuahangController;
 use App\Http\Controllers\Admin\SanphamController;
 use App\Http\Controllers\Admin\ThongbaoController;
 use App\Http\Controllers\Admin\XacthucController;
+use App\Http\Controllers\Admin\NguoidungController;
 use App\Http\Controllers\Web\GiohangController;
 use App\Http\Controllers\Web\SanphamController as WebSanphamController;
 use App\Http\Controllers\Web\ThanhtoanController;
@@ -69,6 +70,13 @@ Route::prefix('admin')
     Route::get('/caidatcuahang', [CaidatcuahangController::class, 'index'])->name('caidatcuahang.index');
     Route::match(['POST', 'PUT', 'PATCH'], '/caidatcuahang', [CaidatcuahangController::class, 'capnhat'])->name('caidatcuahang.capnhat');
     Route::delete('/caidatcuahang/logo', [CaidatcuahangController::class, 'xoalogo'])->name('caidatcuahang.xoalogo');
+
+    Route::get('/nguoidung', [NguoidungController::class, 'index'])->name('nguoidung.index');
+    Route::post('/nguoidung', [NguoidungController::class, 'store'])->name('nguoidung.store');
+    Route::put('/nguoidung/{nguoidung}', [NguoidungController::class, 'update'])->name('nguoidung.update');
+    Route::patch('/nguoidung/{nguoidung}/doi-mat-khau', [NguoidungController::class, 'doiMatKhau'])->name('nguoidung.doimatkhau');
+    Route::patch('/nguoidung/{nguoidung}/doi-trang-thai', [NguoidungController::class, 'doiTrangThai'])->name('nguoidung.doitrangthai');
+    Route::delete('/nguoidung/{nguoidung}', [NguoidungController::class, 'destroy'])->name('nguoidung.destroy');
 
     Route::get('/thongbao', [ThongbaoController::class, 'index'])->name('thongbao.index');
     Route::patch('/thongbao/danh-dau-tat-ca-da-doc', [ThongbaoController::class, 'danhDauTatCaDaDoc'])->name('thongbao.daudoc.tatca');

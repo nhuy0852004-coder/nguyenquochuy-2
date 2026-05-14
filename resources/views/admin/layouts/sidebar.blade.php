@@ -53,6 +53,12 @@
 
             <div class="sidebar-label">Vận hành</div>
 
+            <a href="{{ route('admin.nguoidung.index') }}"
+               class="sidebar-link {{ request()->routeIs('admin.nguoidung.*') ? 'active' : '' }}">
+                <i class="bi bi-person-gear"></i>
+                <span>Người dùng</span>
+            </a>
+
             <a href="{{ route('admin.thongbao.index') }}"
                class="sidebar-link {{ request()->routeIs('admin.thongbao.*') ? 'active' : '' }}">
                 <i class="bi bi-bell"></i>
