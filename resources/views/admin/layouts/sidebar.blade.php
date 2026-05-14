@@ -1,3 +1,7 @@
+@php
+    $admin = auth()->user();
+@endphp
+
 <aside class="admin-sidebar" id="adminSidebar">
     <div class="sidebar-logo">
         <a href="{{ route('admin.bangdieukhien') }}" class="sidebar-logo-link">
@@ -27,11 +31,13 @@
 
             <div class="sidebar-label">Quản lý bán hàng</div>
 
-            <a href="{{ route('admin.danhmuc.index') }}"
-               class="sidebar-link {{ request()->routeIs('admin.danhmuc.*') ? 'active' : '' }}">
-                <i class="bi bi-tags"></i>
-                <span>Danh mục</span>
-            </a>
+            @if ($admin?->laAdmin())
+                <a href="{{ route('admin.danhmuc.index') }}"
+                   class="sidebar-link {{ request()->routeIs('admin.danhmuc.*') ? 'active' : '' }}">
+                    <i class="bi bi-tags"></i>
+                    <span>Danh mục</span>
+                </a>
+            @endif
 
             <a href="{{ route('admin.sanpham.index') }}"
                class="sidebar-link {{ request()->routeIs('admin.sanpham.*') ? 'active' : '' }}">
@@ -53,11 +59,13 @@
 
             <div class="sidebar-label">Vận hành</div>
 
-            <a href="{{ route('admin.nguoidung.index') }}"
-               class="sidebar-link {{ request()->routeIs('admin.nguoidung.*') ? 'active' : '' }}">
-                <i class="bi bi-person-gear"></i>
-                <span>Người dùng</span>
-            </a>
+            @if ($admin?->laAdmin())
+                <a href="{{ route('admin.nguoidung.index') }}"
+                   class="sidebar-link {{ request()->routeIs('admin.nguoidung.*') ? 'active' : '' }}">
+                    <i class="bi bi-person-gear"></i>
+                    <span>Người dùng</span>
+                </a>
+            @endif
 
             <a href="{{ route('admin.thongbao.index') }}"
                class="sidebar-link {{ request()->routeIs('admin.thongbao.*') ? 'active' : '' }}">
@@ -65,17 +73,21 @@
                 <span>Thông báo</span>
             </a>
 
-            <a href="{{ route('admin.baocao.index') }}"
-               class="sidebar-link {{ request()->routeIs('admin.baocao.*') ? 'active' : '' }}">
-                <i class="bi bi-bar-chart"></i>
-                <span>Báo cáo doanh thu</span>
-            </a>
+            @if ($admin?->laAdmin())
+                <a href="{{ route('admin.baocao.index') }}"
+                   class="sidebar-link {{ request()->routeIs('admin.baocao.*') ? 'active' : '' }}">
+                    <i class="bi bi-bar-chart"></i>
+                    <span>Báo cáo doanh thu</span>
+                </a>
+            @endif
 
-            <a href="{{ route('admin.caidatcuahang.index') }}"
-               class="sidebar-link {{ request()->routeIs('admin.caidatcuahang.*') ? 'active' : '' }}">
-                <i class="bi bi-gear"></i>
-                <span>Cài đặt cửa hàng</span>
-            </a>
+            @if ($admin?->laAdmin())
+                <a href="{{ route('admin.caidatcuahang.index') }}"
+                   class="sidebar-link {{ request()->routeIs('admin.caidatcuahang.*') ? 'active' : '' }}">
+                    <i class="bi bi-gear"></i>
+                    <span>Cài đặt cửa hàng</span>
+                </a>
+            @endif
         </nav>
     </div>
 

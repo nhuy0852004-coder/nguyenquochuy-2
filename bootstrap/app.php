@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'kiemtraadmin' => \App\Http\Middleware\Kiemtraadmin::class,
+            'kiemtravaitro' => \App\Http\Middleware\Kiemtravaitro::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -25,7 +25,7 @@ class Kiemtraadmin
                 ->with('loi', 'Tài khoản của bạn đã bị khóa.');
         }
 
-        if (!Auth::user()->laAdmin()) {
+        if (!Auth::user()->coQuyenVaoAdmin()) {
             abort(403, 'Bạn không có quyền truy cập trang quản trị.');
         }
 

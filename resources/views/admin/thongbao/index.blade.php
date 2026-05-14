@@ -124,18 +124,23 @@
                                     </form>
                                 @endif
 
-                                <form
-                                    action="{{ route('admin.thongbao.xoa', $thongbao) }}"
-                                    method="POST"
-                                    data-confirm="Bạn có chắc muốn xóa thông báo này không?"
-                                >
+                                @if (auth()->user()?->laAdmin())
+                                    <form
+                                        action="{{ route('admin.thongbao.xoa', $thongbao) }}"
+                                        method="POST"
+                                        data-confirm-title="Xóa thông báo?"
+                                        data-confirm="Bạn có chắc muốn xóa thông báo này không?"
+                                        data-confirm-button="Xóa"
+                                        data-confirm-icon="warning"
+                                    >
                                     @csrf
                                     @method('DELETE')
 
-                                    <button type="submit" class="btn-nguyhiem" title="Xóa">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
+                                        <button type="submit" class="btn-nguyhiem" title="Xóa">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                @endif
                             </div>
                         </div>
                     @endforeach

@@ -101,7 +101,9 @@
 
                 <div class="d-none d-md-block text-start">
                     <div class="fw-semibold">{{ $adminDangNhap?->ho_ten ?? 'Quản trị viên' }}</div>
-                    <div class="text-muted small">{{ $adminDangNhap?->email ?? 'admin@cuahang.vn' }}</div>
+                    <div class="text-muted small">
+                        {{ $adminDangNhap?->email ?? 'admin@cuahang.vn' }} · {{ $adminDangNhap?->tenVaiTro() ?? 'Quản trị viên' }}
+                    </div>
                 </div>
 
                 <i class="bi bi-chevron-down small text-muted d-none d-md-inline"></i>

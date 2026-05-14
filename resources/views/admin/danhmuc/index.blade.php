@@ -161,85 +161,6 @@
                             </td>
                         </tr>
 
-                        <div class="modal fade" id="modalSuaDanhMuc{{ $danhmuc->id }}" tabindex="-1" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <form action="{{ route('admin.danhmuc.update', $danhmuc) }}" method="POST" class="modal-content">
-                                    @csrf
-                                    @method('PUT')
-
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Sửa danh mục</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-
-                                    <div class="modal-body">
-                                        <div class="mb-3">
-                                            <label class="form-label">Tên danh mục <span class="text-danger">*</span></label>
-                                            <input
-                                                type="text"
-                                                name="ten_danh_muc"
-                                                class="form-control"
-                                                value="{{ old('ten_danh_muc', $danhmuc->ten_danh_muc) }}"
-                                                required
-                                            >
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Đường dẫn</label>
-                                            <input
-                                                type="text"
-                                                name="duong_dan"
-                                                class="form-control"
-                                                value="{{ old('duong_dan', $danhmuc->duong_dan) }}"
-                                            >
-                                            <div class="form-text">Có thể để trống, hệ thống tự tạo từ tên danh mục.</div>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Mô tả</label>
-                                            <textarea
-                                                name="mo_ta"
-                                                rows="3"
-                                                class="form-control"
-                                            >{{ old('mo_ta', $danhmuc->mo_ta) }}</textarea>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Thứ tự hiển thị</label>
-                                            <input
-                                                type="number"
-                                                name="thu_tu"
-                                                class="form-control"
-                                                value="{{ old('thu_tu', $danhmuc->thu_tu) }}"
-                                                min="0"
-                                            >
-                                        </div>
-
-                                        <div class="form-check form-switch">
-                                            <input
-                                                class="form-check-input"
-                                                type="checkbox"
-                                                name="trang_thai"
-                                                value="1"
-                                                id="trangThaiSua{{ $danhmuc->id }}"
-                                                {{ $danhmuc->trang_thai ? 'checked' : '' }}
-                                            >
-                                            <label class="form-check-label" for="trangThaiSua{{ $danhmuc->id }}">
-                                                Bật hiển thị danh mục
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn-phu" data-bs-dismiss="modal">Hủy</button>
-                                        <button type="submit" class="btn-chinh">
-                                            <i class="bi bi-save"></i>
-                                            Lưu thay đổi
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
                     @empty
                         <tr>
                             <td colspan="7">
@@ -269,6 +190,67 @@
             </div>
         @endif
     </div>
+
+    @foreach ($danhsachdanhmuc as $danhmuc)
+        <div class="modal fade" id="modalSuaDanhMuc{{ $danhmuc->id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <form action="{{ route('admin.danhmuc.update', $danhmuc) }}" method="POST" class="modal-content">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Sửa danh mục</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Tên danh mục <span class="text-danger">*</span></label>
+                            <input type="text" name="ten_danh_muc" class="form-control" value="{{ old('ten_danh_muc', $danhmuc->ten_danh_muc) }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Đường dẫn</label>
+                            <input type="text" name="duong_dan" class="form-control" value="{{ old('duong_dan', $danhmuc->duong_dan) }}">
+                            <div class="form-text">Có thể để trống, hệ thống tự tạo từ tên danh mục.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Mô tả</label>
+                            <textarea name="mo_ta" rows="3" class="form-control">{{ old('mo_ta', $danhmuc->mo_ta) }}</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Thứ tự hiển thị</label>
+                            <input type="number" name="thu_tu" class="form-control" value="{{ old('thu_tu', $danhmuc->thu_tu) }}" min="0">
+                        </div>
+
+                        <div class="form-check form-switch">
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                name="trang_thai"
+                                value="1"
+                                id="trangThaiSua{{ $danhmuc->id }}"
+                                {{ $danhmuc->trang_thai ? 'checked' : '' }}
+                            >
+                            <label class="form-check-label" for="trangThaiSua{{ $danhmuc->id }}">
+                                Bật hiển thị danh mục
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn-phu" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn-chinh">
+                            <i class="bi bi-save"></i>
+                            Lưu thay đổi
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endforeach
 
     <div class="modal fade" id="modalThemDanhMuc" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">

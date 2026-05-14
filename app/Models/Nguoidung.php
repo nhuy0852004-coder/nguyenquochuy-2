@@ -38,4 +38,32 @@ class Nguoidung extends Authenticatable
     {
         return $this->vai_tro === 'admin';
     }
+
+    public function laNhanVien(): bool
+    {
+        return $this->vai_tro === 'nhan_vien';
+    }
+
+    public function coQuyenVaoAdmin(): bool
+    {
+        return in_array($this->vai_tro, ['admin', 'nhan_vien']);
+    }
+
+    public function coVaiTro(string|array $vaiTro): bool
+    {
+        if (is_array($vaiTro)) {
+            return in_array($this->vai_tro, $vaiTro);
+        }
+
+        return $this->vai_tro === $vaiTro;
+    }
+
+    public function tenVaiTro(): string
+    {
+        return match ($this->vai_tro) {
+            'admin' => 'Quản trị viên',
+            'nhan_vien' => 'Nhân viên',
+            default => 'Không xác định',
+        };
+    }
 }

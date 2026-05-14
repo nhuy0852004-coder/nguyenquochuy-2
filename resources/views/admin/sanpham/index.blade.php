@@ -62,10 +62,12 @@
                     Lọc
                 </button>
 
-                <button type="button" class="btn-chinh" data-bs-toggle="modal" data-bs-target="#modalThemSanPham">
-                    <i class="bi bi-plus-circle"></i>
-                    Thêm
-                </button>
+                @if (auth()->user()?->laAdmin())
+                    <button type="button" class="btn-chinh" data-bs-toggle="modal" data-bs-target="#modalThemSanPham">
+                        <i class="bi bi-plus-circle"></i>
+                        Thêm
+                    </button>
+                @endif
             </div>
         </form>
     </div>
@@ -149,75 +151,50 @@
                             </td>
 
                             <td>
-                                <div class="table-actions">
-                                    <button
-                                        type="button"
-                                        class="btn-nho"
-                                        title="Sửa"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#modalSuaSanPham{{ $sanpham->id }}"
-                                    >
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-
-                                    <form action="{{ route('admin.sanpham.doitrangthai', $sanpham) }}" method="POST">
-                                        @csrf
-                                        @method('PATCH')
-
-                                        <button type="submit" class="btn-nho" title="Đổi trạng thái">
-                                            @if ($sanpham->trang_thai)
-                                                <i class="bi bi-toggle-on"></i>
-                                            @else
-                                                <i class="bi bi-toggle-off"></i>
-                                            @endif
+                                @if (auth()->user()?->laAdmin())
+                                    <div class="table-actions">
+                                        <button
+                                            type="button"
+                                            class="btn-nho"
+                                            title="Sửa"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalSuaSanPham{{ $sanpham->id }}"
+                                        >
+                                            <i class="bi bi-pencil"></i>
                                         </button>
-                                    </form>
 
-                                    <form
-                                        action="{{ route('admin.sanpham.destroy', $sanpham) }}"
-                                        method="POST"
-                                        data-confirm="Bạn có chắc muốn xóa sản phẩm này không?"
-                                    >
-                                        @csrf
-                                        @method('DELETE')
+                                        <form action="{{ route('admin.sanpham.doitrangthai', $sanpham) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
 
-                                        <button type="submit" class="btn-nguyhiem" title="Xóa">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-                                </div>
+                                            <button type="submit" class="btn-nho" title="Đổi trạng thái">
+                                                @if ($sanpham->trang_thai)
+                                                    <i class="bi bi-toggle-on"></i>
+                                                @else
+                                                    <i class="bi bi-toggle-off"></i>
+                                                @endif
+                                            </button>
+                                        </form>
+
+                                        <form
+                                            action="{{ route('admin.sanpham.destroy', $sanpham) }}"
+                                            method="POST"
+                                            data-confirm="Bạn có chắc muốn xóa sản phẩm này không?"
+                                        >
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit" class="btn-nguyhiem" title="Xóa">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                @else
+                                    <span class="text-muted small">Chỉ xem</span>
+                                @endif
                             </td>
                         </tr>
 
-                        <div class="modal fade" id="modalSuaSanPham{{ $sanpham->id }}" tabindex="-1" aria-hidden="true">
-                            <div class="modal-dialog modal-xl modal-dialog-centered">
-                                <form action="{{ route('admin.sanpham.update', $sanpham) }}" method="POST" enctype="multipart/form-data" class="modal-content">
-                                    @csrf
-                                    @method('PUT')
-
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Sửa sản phẩm</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-
-                                    <div class="modal-body">
-                                        @include('admin.sanpham._form', [
-                                            'sanpham' => $sanpham,
-                                            'danhsachdanhmuc' => $danhsachdanhmuc,
-                                            'prefix' => 'sua' . $sanpham->id
-                                        ])
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn-phu" data-bs-dismiss="modal">Hủy</button>
-                                        <button type="submit" class="btn-chinh">
-                                            <i class="bi bi-save"></i>
-                                            Lưu thay đổi
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
                     @empty
                         <tr>
                             <td colspan="7">
@@ -248,34 +225,70 @@
         @endif
     </div>
 
-    <div class="modal fade" id="modalThemSanPham" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <form action="{{ route('admin.sanpham.store') }}" method="POST" enctype="multipart/form-data" class="modal-content">
-                @csrf
+    @if (auth()->user()?->laAdmin())
+        @foreach ($danhsachsanpham as $sanpham)
+            <div class="modal fade" id="modalSuaSanPham{{ $sanpham->id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-centered">
+                    <form action="{{ route('admin.sanpham.update', $sanpham) }}" method="POST" enctype="multipart/form-data" class="modal-content">
+                        @csrf
+                        @method('PUT')
 
-                <div class="modal-header">
-                    <h5 class="modal-title">Thêm sản phẩm mới</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
+                        <div class="modal-header">
+                            <h5 class="modal-title">Sửa sản phẩm</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
 
-                <div class="modal-body">
-                    @include('admin.sanpham._form', [
-                        'sanpham' => null,
-                        'danhsachdanhmuc' => $danhsachdanhmuc,
-                        'prefix' => 'them'
-                    ])
-                </div>
+                        <div class="modal-body">
+                            @include('admin.sanpham._form', [
+                                'sanpham' => $sanpham,
+                                'danhsachdanhmuc' => $danhsachdanhmuc,
+                                'prefix' => 'sua' . $sanpham->id
+                            ])
+                        </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn-phu" data-bs-dismiss="modal">Hủy</button>
-                    <button type="submit" class="btn-chinh">
-                        <i class="bi bi-plus-circle"></i>
-                        Thêm sản phẩm
-                    </button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn-phu" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn-chinh">
+                                <i class="bi bi-save"></i>
+                                Lưu thay đổi
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
+        @endforeach
+    @endif
+
+    @if (auth()->user()?->laAdmin())
+        <div class="modal fade" id="modalThemSanPham" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <form action="{{ route('admin.sanpham.store') }}" method="POST" enctype="multipart/form-data" class="modal-content">
+                    @csrf
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Thêm sản phẩm mới</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        @include('admin.sanpham._form', [
+                            'sanpham' => null,
+                            'danhsachdanhmuc' => $danhsachdanhmuc,
+                            'prefix' => 'them'
+                        ])
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn-phu" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn-chinh">
+                            <i class="bi bi-plus-circle"></i>
+                            Thêm sản phẩm
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
+    @endif
 @endsection
 
 @push('scripts')
