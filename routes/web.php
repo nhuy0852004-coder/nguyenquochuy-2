@@ -71,6 +71,9 @@ Route::prefix('admin')
             Route::put('/sanpham/{sanpham}', [SanphamController::class, 'update'])->name('sanpham.update');
             Route::delete('/sanpham/{sanpham}', [SanphamController::class, 'destroy'])->name('sanpham.destroy');
             Route::patch('/sanpham/{sanpham}/doi-trang-thai', [SanphamController::class, 'doitrangthai'])->name('sanpham.doitrangthai');
+            Route::patch('/sanpham/{sanpham}/cap-nhat-ton-kho', [SanphamController::class, 'capnhattonkho'])->name('sanpham.capnhattonkho');
+            Route::patch('/sanpham/{sanpham}/doi-noi-bat', [SanphamController::class, 'doinoibat'])->name('sanpham.doinoibat');
+            Route::post('/sanpham/{sanpham}/nhan-ban', [SanphamController::class, 'nhanban'])->name('sanpham.nhanban');
 
             Route::get('/nguoidung', [NguoidungController::class, 'index'])->name('nguoidung.index');
             Route::post('/nguoidung', [NguoidungController::class, 'store'])->name('nguoidung.store');

@@ -156,8 +156,15 @@ class SanphamRepository
             ->get();
     }
 
-    public function timKiemSanPhamAdmin(?string $tukhoa, ?string $danhmucId, mixed $trangthai, int $limit = 10)
-    {
+    public function timKiemSanPhamAdmin(
+        ?string $tukhoa,
+        ?string $danhmucId,
+        mixed $trangthai,
+        ?string $tonkho = null,
+        ?string $noibat = null,
+        ?string $khuyenmai = null,
+        int $limit = 10
+    ) {
         return Sanpham::query()
             ->select(
                 'id',
@@ -172,7 +179,8 @@ class SanphamRepository
                 'anh_dai_dien',
                 'trang_thai',
                 'noi_bat',
-                'created_at'
+                'created_at',
+                'updated_at'
             )
             ->with('danhmuc:id,ten_danh_muc')
             ->when($tukhoa, function ($query) use ($tukhoa) {
@@ -187,6 +195,24 @@ class SanphamRepository
             })
             ->when($trangthai !== null && $trangthai !== '', function ($query) use ($trangthai) {
                 $query->where('trang_thai', (bool) $trangthai);
+            })
+            ->when($tonkho === 'con_hang', function ($query) {
+                $query->where('so_luong_ton', '>', 0)
+                    ->whereColumn('so_luong_ton', '>', 'muc_canh_bao_ton');
+            })
+            ->when($tonkho === 'gan_het', function ($query) {
+                $query->where('so_luong_ton', '>', 0)
+                    ->whereColumn('so_luong_ton', '<=', 'muc_canh_bao_ton');
+            })
+            ->when($tonkho === 'het_hang', function ($query) {
+                $query->where('so_luong_ton', '<=', 0);
+            })
+            ->when($noibat !== null && $noibat !== '', function ($query) use ($noibat) {
+                $query->where('noi_bat', (bool) $noibat);
+            })
+            ->when($khuyenmai === '1', function ($query) {
+                $query->whereNotNull('gia_khuyen_mai')
+                    ->where('gia_khuyen_mai', '>', 0);
             })
             ->orderByDesc('id')
             ->paginate($limit)

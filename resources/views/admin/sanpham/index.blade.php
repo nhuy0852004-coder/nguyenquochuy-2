@@ -36,7 +36,7 @@
     @endif
 
     <div class="bo-loc">
-        <form action="{{ route('admin.sanpham.index') }}" method="GET" class="product-filter-grid">
+        <form action="{{ route('admin.sanpham.index') }}" method="GET" class="product-filter-grid product-filter-grid-pro">
             <div class="bo-loc-input">
                 <i class="bi bi-search"></i>
                 <input
@@ -62,11 +62,35 @@
                 <option value="0" {{ $trangthai === '0' ? 'selected' : '' }}>Đang ẩn</option>
             </select>
 
+            <select name="ton_kho" class="form-select">
+                <option value="">Tất cả tồn kho</option>
+                <option value="con_hang" {{ $tonkho === 'con_hang' ? 'selected' : '' }}>Còn hàng</option>
+                <option value="gan_het" {{ $tonkho === 'gan_het' ? 'selected' : '' }}>Gần hết hàng</option>
+                <option value="het_hang" {{ $tonkho === 'het_hang' ? 'selected' : '' }}>Hết hàng</option>
+            </select>
+
+            <select name="noi_bat" class="form-select">
+                <option value="">Tất cả nổi bật</option>
+                <option value="1" {{ $noibat === '1' ? 'selected' : '' }}>Nổi bật</option>
+                <option value="0" {{ $noibat === '0' ? 'selected' : '' }}>Không nổi bật</option>
+            </select>
+
+            <select name="khuyen_mai" class="form-select">
+                <option value="">Tất cả giá</option>
+                <option value="1" {{ $khuyenmai === '1' ? 'selected' : '' }}>Đang khuyến mãi</option>
+            </select>
+
             <div class="d-flex gap-2">
                 <button type="submit" class="btn-phu">
                     <i class="bi bi-funnel"></i>
                     Lọc
                 </button>
+
+                @if ($tukhoa || $danhmucId || ($trangthai !== null && $trangthai !== '') || $tonkho || ($noibat !== null && $noibat !== '') || $khuyenmai)
+                    <a href="{{ route('admin.sanpham.index') }}" class="btn-phu">
+                        Xóa lọc
+                    </a>
+                @endif
 
                 @if (auth()->user()?->laAdmin())
                     <button type="button" class="btn-chinh" data-bs-toggle="modal" data-bs-target="#modalThemSanPham">
@@ -76,6 +100,28 @@
                 @endif
             </div>
         </form>
+    </div>
+
+    <div class="product-mini-stat-grid">
+        <div class="product-mini-stat">
+            <span>Tổng sản phẩm</span>
+            <strong>{{ $danhsachsanpham->total() }}</strong>
+        </div>
+
+        <div class="product-mini-stat">
+            <span>Đang hiển thị</span>
+            <strong>{{ $danhsachsanpham->where('trang_thai', true)->count() }}</strong>
+        </div>
+
+        <div class="product-mini-stat">
+            <span>Gần hết trong trang</span>
+            <strong>{{ $danhsachsanpham->filter(fn($sp) => $sp->so_luong_ton > 0 && $sp->so_luong_ton <= $sp->muc_canh_bao_ton)->count() }}</strong>
+        </div>
+
+        <div class="product-mini-stat">
+            <span>Hết hàng trong trang</span>
+            <strong>{{ $danhsachsanpham->filter(fn($sp) => $sp->so_luong_ton <= 0)->count() }}</strong>
+        </div>
     </div>
 
     <div class="content-card">
