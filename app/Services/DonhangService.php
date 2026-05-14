@@ -64,6 +64,8 @@ class DonhangService
 
         $donhang->refresh();
 
+        cache()->forget('dashboard_thong_ke');
+
         try {
             broadcast(new CapnhattrangthaidonhangEvent($donhang));
         } catch (\Throwable $e) {

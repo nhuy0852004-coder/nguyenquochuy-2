@@ -57,29 +57,30 @@ class BaocaoService
 
     private function layDoanhThu7NgayGanNhat(): array
     {
+        $tuNgay = now()->subDays(6)->startOfDay();
+        $denNgay = now()->endOfDay();
+
+        $dulieu = Donhang::query()
+            ->selectRaw('DATE(created_at) as ngay')
+            ->selectRaw('SUM(tong_tien) as doanh_thu')
+            ->selectRaw('COUNT(*) as so_don')
+            ->whereBetween('created_at', [$tuNgay, $denNgay])
+            ->where('trang_thai_don_hang', '!=', Donhang::TRANG_THAI_DA_HUY)
+            ->groupByRaw('DATE(created_at)')
+            ->get()
+            ->keyBy('ngay');
+
         $ketqua = [];
 
         for ($i = 6; $i >= 0; $i--) {
             $ngay = now()->subDays($i);
-
-            $doanhthu = $this->donhangRepository->tinhDoanhThuTheoKhoang(
-                $ngay->copy()->startOfDay(),
-                $ngay->copy()->endOfDay()
-            );
-
-            $sodon = Donhang::query()
-                ->whereBetween('created_at', [
-                    $ngay->copy()->startOfDay(),
-                    $ngay->copy()->endOfDay(),
-                ])
-                ->where('trang_thai_don_hang', '!=', Donhang::TRANG_THAI_DA_HUY)
-                ->count();
+            $key = $ngay->toDateString();
 
             $ketqua[] = [
                 'ngay' => $ngay->format('d/m'),
                 'ngay_day_du' => $ngay->format('d/m/Y'),
-                'doanh_thu' => $doanhthu,
-                'so_don' => $sodon,
+                'doanh_thu' => (int) ($dulieu[$key]->doanh_thu ?? 0),
+                'so_don' => (int) ($dulieu[$key]->so_don ?? 0),
             ];
         }
 

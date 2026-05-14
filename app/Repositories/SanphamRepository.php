@@ -45,6 +45,7 @@ class SanphamRepository
     public function laySanPhamGanHet(int $limit = 6)
     {
         return Sanpham::query()
+            ->select('id', 'ten_san_pham', 'so_luong_ton', 'muc_canh_bao_ton')
             ->whereColumn('so_luong_ton', '<=', 'muc_canh_bao_ton')
             ->orderBy('so_luong_ton')
             ->limit($limit)
@@ -104,7 +105,22 @@ class SanphamRepository
     public function timKiemSanPhamAdmin(?string $tukhoa, ?string $danhmucId, mixed $trangthai, int $limit = 10)
     {
         return Sanpham::query()
-            ->with('danhmuc')
+            ->select(
+                'id',
+                'danhmuc_id',
+                'ten_san_pham',
+                'duong_dan',
+                'ma_san_pham',
+                'gia_ban',
+                'gia_khuyen_mai',
+                'so_luong_ton',
+                'muc_canh_bao_ton',
+                'anh_dai_dien',
+                'trang_thai',
+                'noi_bat',
+                'created_at'
+            )
+            ->with('danhmuc:id,ten_danh_muc')
             ->when($tukhoa, function ($query) use ($tukhoa) {
                 $query->where(function ($q) use ($tukhoa) {
                     $q->where('ten_san_pham', 'like', '%' . $tukhoa . '%')

@@ -4,32 +4,25 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Thongbao;
+use App\Repositories\ThongbaoRepository;
 use Illuminate\Http\Request;
 
 class ThongbaoController extends Controller
 {
+    public function __construct(
+        private ThongbaoRepository $thongbaoRepository
+    ) {
+        //
+    }
+
     public function index(Request $request)
     {
         $trangthai = $request->input('trang_thai');
         $loai = $request->input('loai');
 
-        $danhsachthongbao = Thongbao::query()
-            ->when($trangthai === 'chua_doc', function ($query) {
-                $query->where('da_doc', false);
-            })
-            ->when($trangthai === 'da_doc', function ($query) {
-                $query->where('da_doc', true);
-            })
-            ->when($loai, function ($query) use ($loai) {
-                $query->where('loai', $loai);
-            })
-            ->orderByDesc('id')
-            ->paginate(15)
-            ->withQueryString();
+        $danhsachthongbao = $this->thongbaoRepository->locPhanTrang($trangthai, $loai);
 
-        $soluongchuadoc = Thongbao::query()
-            ->where('da_doc', false)
-            ->count();
+        $soluongchuadoc = $this->thongbaoRepository->demChuaDoc();
 
         return view('admin.thongbao.index', compact(
             'danhsachthongbao',
@@ -42,6 +35,8 @@ class ThongbaoController extends Controller
     public function danhDauDaDoc(Thongbao $thongbao)
     {
         $thongbao->danhDauDaDoc();
+        cache()->forget('thongbao_chua_doc_count');
+        cache()->forget('thongbao_moi_nhat');
 
         if ($thongbao->duong_dan) {
             return redirect($thongbao->duong_dan);
@@ -61,6 +56,9 @@ class ThongbaoController extends Controller
                 'doc_luc' => now(),
             ]);
 
+        cache()->forget('thongbao_chua_doc_count');
+        cache()->forget('thongbao_moi_nhat');
+
         return redirect()
             ->route('admin.thongbao.index')
             ->with('thanhcong', 'Đã đánh dấu tất cả thông báo là đã đọc.');
@@ -69,6 +67,8 @@ class ThongbaoController extends Controller
     public function xoa(Thongbao $thongbao)
     {
         $thongbao->delete();
+        cache()->forget('thongbao_chua_doc_count');
+        cache()->forget('thongbao_moi_nhat');
 
         return redirect()
             ->route('admin.thongbao.index')

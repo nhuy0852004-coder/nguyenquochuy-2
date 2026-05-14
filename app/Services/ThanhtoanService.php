@@ -95,6 +95,8 @@ class ThanhtoanService
 
         $this->taoThongBaoSauKhiDatHang($donhang);
 
+        cache()->forget('dashboard_thong_ke');
+
         $this->giohangService->xoaTatCa();
 
         return $donhang;

@@ -1,13 +1,15 @@
 @php
-    $soluongThongBaoChuaDoc = \App\Models\Thongbao::query()
-        ->where('da_doc', false)
-        ->count();
+    $thongbaoRepository = app(\App\Repositories\ThongbaoRepository::class);
 
-    $thongBaoMoiNhat = \App\Models\Thongbao::query()
-        ->select('id', 'tieu_de', 'noi_dung', 'loai', 'duong_dan', 'da_doc', 'created_at')
-        ->orderByDesc('id')
-        ->limit(5)
-        ->get();
+    $soluongThongBaoChuaDoc = cache()->remember('thongbao_chua_doc_count', 30, function () use ($thongbaoRepository) {
+        return $thongbaoRepository->demChuaDoc();
+    });
+
+    $thongBaoMoiNhat = cache()->remember('thongbao_moi_nhat', 30, function () use ($thongbaoRepository) {
+        return $thongbaoRepository->layMoiNhat(5);
+    });
+
+    $adminDangNhap = auth()->user();
 @endphp
 
 <header class="admin-header">
@@ -91,10 +93,6 @@
 
         <div class="header-user dropdown">
             <button class="header-user-btn" type="button" data-bs-toggle="dropdown">
-                @php
-                    $adminDangNhap = auth()->user();
-                @endphp
-
                 <div class="header-avatar">
                     {{ mb_substr($adminDangNhap?->ho_ten ?? 'A', 0, 1) }}
                 </div>

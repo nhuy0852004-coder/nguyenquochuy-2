@@ -47,9 +47,16 @@ class KhachhangController extends Controller
     {
         $khachhang->load([
             'donhang' => function ($query) {
-                $query->orderByDesc('id');
+                $query->select(
+                    'id',
+                    'khachhang_id',
+                    'ma_don_hang',
+                    'tong_tien',
+                    'trang_thai_don_hang',
+                    'created_at'
+                )->orderByDesc('id');
             },
-            'donhang.chitietdonhang',
+            'donhang.chitietdonhang:id,donhang_id,ten_san_pham,so_luong',
         ]);
 
         $thongke = [
