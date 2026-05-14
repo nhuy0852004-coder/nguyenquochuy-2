@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\SanphamController;
 use App\Http\Controllers\Admin\ThongbaoController;
 use App\Http\Controllers\Admin\XacthucController;
 use App\Http\Controllers\Admin\NguoidungController;
+use App\Http\Controllers\Admin\NhatkyhoatdongController;
 use App\Http\Controllers\Web\GiohangController;
 use App\Http\Controllers\Web\SanphamController as WebSanphamController;
 use App\Http\Controllers\Web\ThanhtoanController;
@@ -85,5 +86,7 @@ Route::prefix('admin')
             Route::delete('/caidatcuahang/logo', [CaidatcuahangController::class, 'xoalogo'])->name('caidatcuahang.xoalogo');
 
             Route::delete('/thongbao/{thongbao}', [ThongbaoController::class, 'xoa'])->name('thongbao.xoa');
+
+            Route::get('/nhatkyhoatdong', [NhatkyhoatdongController::class, 'index'])->name('nhatkyhoatdong.index');
         });
     });

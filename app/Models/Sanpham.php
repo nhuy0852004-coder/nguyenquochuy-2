@@ -51,6 +51,11 @@ class Sanpham extends Model
         return $this->hasMany(Chitietdonhang::class, 'sanpham_id');
     }
 
+    public function daPhatSinhDonHang(): bool
+    {
+        return $this->chitietdonhang()->exists();
+    }
+
     public function giaHienTai(): int
     {
         return $this->gia_khuyen_mai ?: $this->gia_ban;

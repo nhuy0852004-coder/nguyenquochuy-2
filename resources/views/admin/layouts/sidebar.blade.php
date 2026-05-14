@@ -82,6 +82,14 @@
             @endif
 
             @if ($admin?->laAdmin())
+                <a href="{{ route('admin.nhatkyhoatdong.index') }}"
+                   class="sidebar-link {{ request()->routeIs('admin.nhatkyhoatdong.*') ? 'active' : '' }}">
+                    <i class="bi bi-clock-history"></i>
+                    <span>Nhật ký hoạt động</span>
+                </a>
+            @endif
+
+            @if ($admin?->laAdmin())
                 <a href="{{ route('admin.caidatcuahang.index') }}"
                    class="sidebar-link {{ request()->routeIs('admin.caidatcuahang.*') ? 'active' : '' }}">
                     <i class="bi bi-gear"></i>

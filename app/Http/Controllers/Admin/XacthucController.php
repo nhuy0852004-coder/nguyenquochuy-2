@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Nguoidung;
+use App\Services\NhatkyhoatdongService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -66,6 +67,8 @@ class XacthucController extends Controller
 
         $request->session()->regenerate();
 
+        app(NhatkyhoatdongService::class)->ghiDangNhap();
+
         return redirect()
             ->intended(route('admin.bangdieukhien'))
             ->with('thanhcong', 'Đăng nhập thành công.');
@@ -73,6 +76,8 @@ class XacthucController extends Controller
 
     public function dangXuat(Request $request)
     {
+        app(NhatkyhoatdongService::class)->ghiDangXuat();
+
         Auth::logout();
 
         $request->session()->invalidate();

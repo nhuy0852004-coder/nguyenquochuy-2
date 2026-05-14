@@ -18,6 +18,12 @@
         </div>
     @endif
 
+    @if (session('loi'))
+        <div class="alert alert-danger border-0 rounded-3">
+            {{ session('loi') }}
+        </div>
+    @endif
+
     @if ($errors->any())
         <div class="alert alert-danger border-0 rounded-3">
             <div class="fw-bold mb-1">Vui lòng kiểm tra lại thông tin</div>

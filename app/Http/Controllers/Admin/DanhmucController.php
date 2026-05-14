@@ -52,11 +52,17 @@ class DanhmucController extends Controller
 
     public function destroy(Danhmuc $danhmuc)
     {
-        $this->danhmucService->xoaDanhMuc($danhmuc);
+        try {
+            $this->danhmucService->xoaDanhMuc($danhmuc);
 
-        return redirect()
-            ->route('admin.danhmuc.index')
-            ->with('thanhcong', 'Xóa danh mục thành công.');
+            return redirect()
+                ->route('admin.danhmuc.index')
+                ->with('thanhcong', 'Xóa danh mục thành công.');
+        } catch (\Exception $exception) {
+            return redirect()
+                ->route('admin.danhmuc.index')
+                ->with('loi', $exception->getMessage());
+        }
     }
 
     public function doitrangthai(Danhmuc $danhmuc)

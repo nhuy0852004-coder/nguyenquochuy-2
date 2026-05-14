@@ -2448,3 +2448,98 @@ body {
 .swal-admin-cancel:hover {
     background: #f9fafb !important;
 }
+
+.log-filter-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 160px 160px auto;
+    gap: 12px;
+    align-items: end;
+}
+
+.log-action-badge {
+    display: inline-flex;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.log-login {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.log-logout {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.log-create {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.log-update {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.log-delete {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.log-status {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+
+.log-password {
+    background: #fce7f3;
+    color: #be185d;
+}
+
+.log-default {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.log-user-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.log-user-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #dbeafe;
+    color: #1d4ed8;
+    display: grid;
+    place-items: center;
+    font-weight: 900;
+}
+
+.log-content-title {
+    font-weight: 800;
+    margin-bottom: 3px;
+}
+
+.log-content-desc {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+@media (max-width: 1200px) {
+    .log-filter-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .log-filter-grid {
+        grid-template-columns: 1fr;
+    }
+}

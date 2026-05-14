@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Hash;
 class NguoidungService
 {
     public function __construct(
-        private NguoidungRepository $nguoidungRepository
+        private NguoidungRepository $nguoidungRepository,
+        private NhatkyhoatdongService $nhatkyhoatdongService
     ) {
         //
     }
@@ -26,21 +27,50 @@ class NguoidungService
 
         unset($dulieu['mat_khau_confirmation']);
 
-        return $this->nguoidungRepository->tao($dulieu);
+        $nguoidung = $this->nguoidungRepository->tao($dulieu);
+
+        $this->nhatkyhoatdongService->ghiThem(
+            $nguoidung,
+            'Thêm người dùng',
+            'Đã thêm tài khoản: ' . $nguoidung->email
+        );
+
+        return $nguoidung;
     }
 
     public function capNhatNguoiDung(Nguoidung $nguoidung, array $dulieu, bool $trangThai): bool
     {
+        $duLieuCu = $nguoidung->toArray();
+
         $dulieu['trang_thai'] = $trangThai;
 
-        return $this->nguoidungRepository->capNhat($nguoidung, $dulieu);
+        $ketqua = $this->nguoidungRepository->capNhat($nguoidung, $dulieu);
+
+        $this->nhatkyhoatdongService->ghiSua(
+            $nguoidung,
+            $duLieuCu,
+            'Cập nhật người dùng',
+            'Đã cập nhật tài khoản: ' . $nguoidung->fresh()->email
+        );
+
+        return $ketqua;
     }
 
     public function doiMatKhau(Nguoidung $nguoidung, string $matKhauMoi): bool
     {
-        return $this->nguoidungRepository->capNhat($nguoidung, [
+        $ketqua = $this->nguoidungRepository->capNhat($nguoidung, [
             'mat_khau' => Hash::make($matKhauMoi),
         ]);
+
+        $this->nhatkyhoatdongService->ghi(
+            \App\Models\Nhatkyhoatdong::HANH_DONG_DOI_MAT_KHAU,
+            'Đổi mật khẩu người dùng',
+            'Đã đổi mật khẩu cho tài khoản: ' . $nguoidung->email,
+            'Nguoidung',
+            $nguoidung->id
+        );
+
+        return $ketqua;
     }
 
     public function doiTrangThai(Nguoidung $nguoidung): bool
@@ -49,9 +79,20 @@ class NguoidungService
             throw new \Exception('Bạn không thể tự khóa tài khoản đang đăng nhập.');
         }
 
-        return $this->nguoidungRepository->capNhat($nguoidung, [
+        $duLieuCu = $nguoidung->toArray();
+
+        $ketqua = $this->nguoidungRepository->capNhat($nguoidung, [
             'trang_thai' => !$nguoidung->trang_thai,
         ]);
+
+        $this->nhatkyhoatdongService->ghiDoiTrangThai(
+            $nguoidung,
+            $duLieuCu,
+            'Đổi trạng thái người dùng',
+            'Đã đổi trạng thái tài khoản: ' . $nguoidung->fresh()->email
+        );
+
+        return $ketqua;
     }
 
     public function xoaNguoiDung(Nguoidung $nguoidung): bool
@@ -59,6 +100,12 @@ class NguoidungService
         if (auth()->id() === $nguoidung->id) {
             throw new \Exception('Bạn không thể xóa tài khoản đang đăng nhập.');
         }
+
+        $this->nhatkyhoatdongService->ghiXoa(
+            $nguoidung,
+            'Xóa người dùng',
+            'Đã xóa tài khoản: ' . $nguoidung->email
+        );
 
         return $this->nguoidungRepository->xoa($nguoidung);
     }

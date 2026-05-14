@@ -72,11 +72,17 @@ class SanphamController extends Controller
 
     public function destroy(Sanpham $sanpham)
     {
-        $this->sanphamService->xoaSanPham($sanpham);
+        try {
+            $this->sanphamService->xoaSanPham($sanpham);
 
-        return redirect()
-            ->route('admin.sanpham.index')
-            ->with('thanhcong', 'Xóa sản phẩm thành công.');
+            return redirect()
+                ->route('admin.sanpham.index')
+                ->with('thanhcong', 'Xóa sản phẩm thành công.');
+        } catch (\Exception $exception) {
+            return redirect()
+                ->route('admin.sanpham.index')
+                ->with('loi', $exception->getMessage());
+        }
     }
 
     public function doitrangthai(Sanpham $sanpham)

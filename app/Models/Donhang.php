@@ -22,12 +22,16 @@ class Donhang extends Model
         'phuong_thuc_thanh_toan',
         'trang_thai_thanh_toan',
         'trang_thai_don_hang',
+        'da_hoan_kho',
+        'hoan_kho_luc',
     ];
 
     protected $casts = [
         'tam_tinh' => 'integer',
         'phi_van_chuyen' => 'integer',
         'tong_tien' => 'integer',
+        'da_hoan_kho' => 'boolean',
+        'hoan_kho_luc' => 'datetime',
     ];
 
     public const TRANG_THAI_CHO_XAC_NHAN = 'cho_xac_nhan';
@@ -90,5 +94,20 @@ class Donhang extends Model
             'da_thanh_toan' => 'Đã thanh toán',
             default => 'Không xác định',
         };
+    }
+
+    public function daHuy(): bool
+    {
+        return $this->trang_thai_don_hang === self::TRANG_THAI_DA_HUY;
+    }
+
+    public function daHoanThanh(): bool
+    {
+        return $this->trang_thai_don_hang === self::TRANG_THAI_HOAN_THANH;
+    }
+
+    public function canHoanKho(): bool
+    {
+        return $this->daHuy() && !$this->da_hoan_kho;
     }
 }
