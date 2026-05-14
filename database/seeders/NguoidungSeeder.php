@@ -12,10 +12,10 @@ class NguoidungSeeder extends Seeder
     {
         Nguoidung::updateOrCreate(
             [
-                'email' => 'admin@cuahang.vn',
+                'email' => 'nhuy08052004@gmail.com',
             ],
             [
-                'ho_ten' => 'Quản trị viên',
+                'ho_ten' => 'Admin',
                 'mat_khau' => Hash::make('12345678'),
                 'vai_tro' => 'admin',
                 'trang_thai' => true,

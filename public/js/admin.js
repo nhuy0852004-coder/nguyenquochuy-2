@@ -12,8 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 wrapper?.classList.toggle('sidebar-collapsed');
                 luuTrangThaiSidebar(wrapper?.classList.contains('sidebar-collapsed'));
             } else {
-                sidebar?.classList.add('show');
-                overlay?.classList.add('show');
+                moSidebarMobile();
             }
         });
     }
@@ -26,9 +25,16 @@ document.addEventListener('DOMContentLoaded', function () {
         overlay.addEventListener('click', dongSidebarMobile);
     }
 
+    function moSidebarMobile() {
+        sidebar?.classList.add('show');
+        overlay?.classList.add('show');
+        document.body.classList.add('admin-menu-open');
+    }
+
     function dongSidebarMobile() {
         sidebar?.classList.remove('show');
         overlay?.classList.remove('show');
+        document.body.classList.remove('admin-menu-open');
     }
 
     function luuTrangThaiSidebar(isCollapsed) {
@@ -48,35 +54,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     khoiPhucTrangThaiSidebar();
-
-    document.querySelectorAll('form').forEach(function (form) {
-        form.addEventListener('submit', function () {
-            const skipLoading = form.dataset.skipLoading === 'true';
-            const hasConfirm = form.hasAttribute('data-confirm');
-
-            if (!skipLoading && !hasConfirm && pageLoading) {
-                pageLoading.classList.add('show');
-            }
-
-            if (hasConfirm) {
-                return;
-            }
-
-            form.querySelectorAll('button[type="submit"]').forEach(function (button) {
-                if (!button.dataset.noDisable) {
-                    button.disabled = true;
-
-                    if (!button.dataset.originalText) {
-                        button.dataset.originalText = button.innerHTML;
-                    }
-
-                    if (!button.classList.contains('btn-nho') && !button.classList.contains('btn-nguyhiem')) {
-                        button.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Đang xử lý';
-                    }
-                }
-            });
-        });
-    });
 
     document.querySelectorAll('form[data-confirm]').forEach(function (form) {
         form.addEventListener('submit', function (event) {
@@ -107,8 +84,36 @@ document.addEventListener('DOMContentLoaded', function () {
                 buttonsStyling: false
             }).then(function (result) {
                 if (result.isConfirmed) {
+                    if (pageLoading) {
+                        pageLoading.classList.add('show');
+                    }
+
                     form.removeAttribute('data-confirm');
                     form.submit();
+                }
+            });
+        });
+    });
+
+    document.querySelectorAll('form:not([data-confirm])').forEach(function (form) {
+        form.addEventListener('submit', function () {
+            const skipLoading = form.dataset.skipLoading === 'true';
+
+            if (!skipLoading && pageLoading) {
+                pageLoading.classList.add('show');
+            }
+
+            form.querySelectorAll('button[type="submit"]').forEach(function (button) {
+                if (!button.dataset.noDisable) {
+                    button.disabled = true;
+
+                    if (!button.dataset.originalText) {
+                        button.dataset.originalText = button.innerHTML;
+                    }
+
+                    if (!button.classList.contains('btn-nho') && !button.classList.contains('btn-nguyhiem')) {
+                        button.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Đang xử lý';
+                    }
                 }
             });
         });
@@ -121,4 +126,10 @@ document.addEventListener('DOMContentLoaded', function () {
             toastThongBao.style.display = 'none';
         }, 3000);
     }
+
+    window.addEventListener('resize', function () {
+        if (window.innerWidth >= 992) {
+            dongSidebarMobile();
+        }
+    });
 });

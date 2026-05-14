@@ -18,10 +18,15 @@
             <i class="bi bi-list"></i>
         </button>
 
-        <div class="header-search">
+        <form action="{{ route('admin.donhang.index') }}" method="GET" class="header-search">
             <i class="bi bi-search"></i>
-            <input type="text" placeholder="Tìm kiếm đơn hàng, sản phẩm, khách hàng...">
-        </div>
+            <input
+                type="text"
+                name="tu_khoa"
+                placeholder="Tìm mã đơn, khách hàng, số điện thoại..."
+                value="{{ request('tu_khoa') }}"
+            >
+        </form>
     </div>
 
     <div class="header-actions">
@@ -100,7 +105,8 @@
                 <div class="d-none d-md-block text-start">
                     <div class="fw-semibold">{{ $adminDangNhap?->ho_ten ?? 'Quản trị viên' }}</div>
                     <div class="text-muted small">
-                        {{ $adminDangNhap?->email ?? 'admin@cuahang.vn' }} · {{ $adminDangNhap?->tenVaiTro() ?? 'Quản trị viên' }}
+                        {{ $adminDangNhap?->email ?? 'admin@cuahang.vn' }}
+                        · {{ $adminDangNhap?->tenVaiTro() ?? 'Quản trị viên' }}
                     </div>
                 </div>
 
@@ -120,7 +126,14 @@
 
                 <div class="dropdown-divider"></div>
 
-                <form action="{{ route('admin.dangxuat') }}" method="POST">
+                <form
+                    action="{{ route('admin.dangxuat') }}"
+                    method="POST"
+                    data-confirm-title="Đăng xuất?"
+                    data-confirm="Bạn có chắc muốn đăng xuất khỏi hệ thống quản trị không?"
+                    data-confirm-button="Đăng xuất"
+                    data-confirm-icon="question"
+                >
                     @csrf
 
                     <button type="submit" class="dropdown-item text-danger">
