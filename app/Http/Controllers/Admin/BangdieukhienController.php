@@ -17,10 +17,6 @@ class BangdieukhienController extends Controller
     {
         $dulieu = $this->thongkeService->layDuLieuDashboard();
 
-        return view('admin.bangdieukhien.index', [
-            'thongke' => $dulieu['thongke'],
-            'donhangmoi' => $dulieu['donhangmoi'],
-            'sanphamganhet' => $dulieu['sanphamganhet'],
-        ]);
+        return view('admin.bangdieukhien.index', compact('dulieu'));
     }
 }

@@ -121,11 +121,27 @@
             <div class="order-info-box mb-3">
                 <h3>Cập nhật trạng thái</h3>
 
+                @if ($donhang->trang_thai_don_hang === \App\Models\Donhang::TRANG_THAI_DA_HUY)
+                    <div class="alert alert-danger border-0 rounded-3 mb-3">
+                        Đơn hàng này đã hủy và không thể chuyển sang trạng thái khác.
+                    </div>
+                @endif
+
+                @if ($donhang->trang_thai_don_hang === \App\Models\Donhang::TRANG_THAI_HOAN_THANH)
+                    <div class="alert alert-success border-0 rounded-3 mb-3">
+                        Đơn hàng đã hoàn thành. Không nên hủy đơn sau khi hoàn thành.
+                    </div>
+                @endif
+
                 <form action="{{ route('admin.donhang.capnhattrangthai', $donhang) }}" method="POST" class="status-form">
                     @csrf
                     @method('PATCH')
 
-                    <select name="trang_thai_don_hang" class="form-select">
+                    <select
+                        name="trang_thai_don_hang"
+                        class="form-select"
+                        {{ $donhang->trang_thai_don_hang === \App\Models\Donhang::TRANG_THAI_DA_HUY ? 'disabled' : '' }}
+                    >
                         @foreach ($danhsachtrangthai as $key => $label)
                             <option value="{{ $key }}" {{ $donhang->trang_thai_don_hang === $key ? 'selected' : '' }}>
                                 {{ $label }}
@@ -133,7 +149,11 @@
                         @endforeach
                     </select>
 
-                    <button type="submit" class="btn-chinh">
+                    <button
+                        type="submit"
+                        class="btn-chinh"
+                        {{ $donhang->trang_thai_don_hang === \App\Models\Donhang::TRANG_THAI_DA_HUY ? 'disabled' : '' }}
+                    >
                         <i class="bi bi-save"></i>
                         Lưu
                     </button>

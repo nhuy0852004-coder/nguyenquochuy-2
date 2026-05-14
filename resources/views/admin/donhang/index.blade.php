@@ -8,6 +8,20 @@
         <p>Theo dõi đơn hàng khách đặt từ website và xử lý trạng thái giao hàng.</p>
     </div>
 
+    <div class="order-tabs">
+        <a href="{{ route('admin.donhang.index') }}"
+           class="order-tab {{ !$trangthai ? 'active' : '' }}">
+            Tất cả
+        </a>
+
+        @foreach ($danhsachtrangthai as $key => $label)
+            <a href="{{ route('admin.donhang.index', ['trang_thai' => $key]) }}"
+               class="order-tab {{ $trangthai === $key ? 'active' : '' }}">
+                {{ $label }}
+            </a>
+        @endforeach
+    </div>
+
     @if (session('thanhcong'))
         <div class="toast-thongbao" id="toastThongBao">
             <i class="bi bi-check-circle-fill"></i>
@@ -121,9 +135,23 @@
                             </td>
 
                             <td>
-                                <a href="{{ route('admin.donhang.chitiet', $donhang) }}" class="btn-nho" title="Xem chi tiết">
-                                    <i class="bi bi-eye"></i>
-                                </a>
+                                <div class="table-actions">
+                                    <a href="{{ route('admin.donhang.chitiet', $donhang) }}" class="btn-nho" title="Xem chi tiết">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+
+                                    @if ($donhang->trang_thai_don_hang === \App\Models\Donhang::TRANG_THAI_CHO_XAC_NHAN)
+                                        <form action="{{ route('admin.donhang.capnhattrangthai', $donhang) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="trang_thai_don_hang" value="da_xac_nhan">
+
+                                            <button type="submit" class="btn-nho" title="Xác nhận đơn">
+                                                <i class="bi bi-check2"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @empty
