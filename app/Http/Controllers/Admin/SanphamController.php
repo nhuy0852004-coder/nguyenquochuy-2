@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CapnhattonkhoRequest;
 use App\Http\Requests\SanphamRequest;
 use App\Models\Sanpham;
 use App\Repositories\DanhmucRepository;
@@ -23,13 +24,19 @@ class SanphamController extends Controller
         $tukhoa = $request->input('tu_khoa');
         $danhmucId = $request->input('danhmuc_id');
         $trangthai = $request->input('trang_thai');
+        $tonkho = $request->input('ton_kho');
+        $noibat = $request->input('noi_bat');
+        $khuyenmai = $request->input('khuyen_mai');
 
         $danhsachdanhmuc = $this->danhmucRepository->layDanhMucDangBat();
 
         $danhsachsanpham = $this->sanphamService->layDanhSachAdmin(
             $tukhoa,
             $danhmucId,
-            $trangthai
+            $trangthai,
+            $tonkho,
+            $noibat,
+            $khuyenmai
         );
 
         return view('admin.sanpham.index', compact(
@@ -37,7 +44,10 @@ class SanphamController extends Controller
             'danhsachdanhmuc',
             'tukhoa',
             'danhmucId',
-            'trangthai'
+            'trangthai',
+            'tonkho',
+            'noibat',
+            'khuyenmai'
         ));
     }
 
@@ -68,6 +78,36 @@ class SanphamController extends Controller
         return redirect()
             ->route('admin.sanpham.index')
             ->with('thanhcong', 'Cập nhật sản phẩm thành công.');
+    }
+
+    public function capnhattonkho(CapnhattonkhoRequest $request, Sanpham $sanpham)
+    {
+        $this->sanphamService->capNhatTonKho(
+            $sanpham,
+            $request->validated()
+        );
+
+        return redirect()
+            ->route('admin.sanpham.index')
+            ->with('thanhcong', 'Cập nhật tồn kho sản phẩm thành công.');
+    }
+
+    public function doinoibat(Sanpham $sanpham)
+    {
+        $this->sanphamService->doiNoiBat($sanpham);
+
+        return redirect()
+            ->route('admin.sanpham.index')
+            ->with('thanhcong', 'Cập nhật trạng thái nổi bật thành công.');
+    }
+
+    public function nhanban(Sanpham $sanpham)
+    {
+        $sanphamMoi = $this->sanphamService->nhanBanSanPham($sanpham);
+
+        return redirect()
+            ->route('admin.sanpham.index', ['tu_khoa' => $sanphamMoi->ma_san_pham])
+            ->with('thanhcong', 'Nhân bản sản phẩm thành công. Sản phẩm mới đang ở trạng thái ẩn.');
     }
 
     public function destroy(Sanpham $sanpham)

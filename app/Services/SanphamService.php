@@ -17,12 +17,21 @@ class SanphamService
         //
     }
 
-    public function layDanhSachAdmin(?string $tukhoa, ?string $danhmucId, mixed $trangthai)
-    {
+    public function layDanhSachAdmin(
+        ?string $tukhoa,
+        ?string $danhmucId,
+        mixed $trangthai,
+        ?string $tonkho = null,
+        ?string $noibat = null,
+        ?string $khuyenmai = null
+    ) {
         return $this->sanphamRepository->timKiemSanPhamAdmin(
             $tukhoa,
             $danhmucId,
-            $trangthai
+            $trangthai,
+            $tonkho,
+            $noibat,
+            $khuyenmai
         );
     }
 
@@ -73,6 +82,71 @@ class SanphamService
         );
 
         return $ketqua;
+    }
+
+    public function capNhatTonKho(Sanpham $sanpham, array $dulieu): bool
+    {
+        $duLieuCu = $sanpham->toArray();
+
+        $ketqua = $this->sanphamRepository->capNhat($sanpham, [
+            'so_luong_ton' => $dulieu['so_luong_ton'],
+            'muc_canh_bao_ton' => $dulieu['muc_canh_bao_ton'],
+        ]);
+
+        $this->nhatkyhoatdongService->ghiSua(
+            $sanpham,
+            $duLieuCu,
+            'Cập nhật tồn kho sản phẩm',
+            'Đã cập nhật tồn kho sản phẩm: ' . $sanpham->fresh()->ten_san_pham
+        );
+
+        return $ketqua;
+    }
+
+    public function doiNoiBat(Sanpham $sanpham): bool
+    {
+        $duLieuCu = $sanpham->toArray();
+
+        $ketqua = $this->sanphamRepository->capNhat($sanpham, [
+            'noi_bat' => !$sanpham->noi_bat,
+        ]);
+
+        $this->nhatkyhoatdongService->ghiDoiTrangThai(
+            $sanpham,
+            $duLieuCu,
+            'Đổi trạng thái nổi bật sản phẩm',
+            'Đã đổi trạng thái nổi bật sản phẩm: ' . $sanpham->fresh()->ten_san_pham
+        );
+
+        return $ketqua;
+    }
+
+    public function nhanBanSanPham(Sanpham $sanpham): Sanpham
+    {
+        $dulieu = $sanpham->toArray();
+
+        unset(
+            $dulieu['id'],
+            $dulieu['created_at'],
+            $dulieu['updated_at'],
+            $dulieu['deleted_at']
+        );
+
+        $dulieu['ten_san_pham'] = $sanpham->ten_san_pham . ' - Bản sao';
+        $dulieu['duong_dan'] = $this->taoDuongDan($dulieu['ten_san_pham']);
+        $dulieu['ma_san_pham'] = $this->taoMaSanPham();
+        $dulieu['trang_thai'] = false;
+        $dulieu['noi_bat'] = false;
+
+        $sanphamMoi = $this->sanphamRepository->tao($dulieu);
+
+        $this->nhatkyhoatdongService->ghiThem(
+            $sanphamMoi,
+            'Nhân bản sản phẩm',
+            'Đã nhân bản sản phẩm từ: ' . $sanpham->ten_san_pham
+        );
+
+        return $sanphamMoi;
     }
 
     public function xoaSanPham(Sanpham $sanpham): bool
