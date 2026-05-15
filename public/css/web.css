@@ -4792,3 +4792,42 @@ textarea {
         text-align: left;
     }
 }
+
+/* Form đăng ký 2 cột */
+.web-auth-card-register {
+    max-width: 720px;
+}
+
+.web-auth-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.web-auth-full {
+    grid-column: 1 / -1;
+}
+
+.web-auth-grid .form-label {
+    font-weight: 800;
+    color: #374151;
+    margin-bottom: 7px;
+}
+
+.web-auth-grid .web-auth-input input {
+    height: 46px;
+}
+
+@media (max-width: 768px) {
+    .web-auth-card-register {
+        max-width: 460px;
+    }
+
+    .web-auth-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .web-auth-full {
+        grid-column: auto;
+    }
+}

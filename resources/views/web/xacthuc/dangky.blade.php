@@ -7,7 +7,7 @@
 @section('noidung')
     <div class="container">
         <section class="web-auth-section">
-            <div class="web-auth-card">
+            <div class="web-auth-card web-auth-card-register">
                 <div class="web-auth-icon">
                     <i class="bi bi-person-plus"></i>
                 </div>
@@ -29,74 +29,76 @@
                 <form action="{{ route('web.xuly.dangky') }}" method="POST">
                     @csrf
 
-                    <div class="mb-3 text-start">
-                        <label class="form-label">Họ tên</label>
-                        <div class="web-auth-input">
-                            <i class="bi bi-person"></i>
-                            <input
-                                type="text"
-                                name="ho_ten"
-                                value="{{ old('ho_ten') }}"
-                                placeholder="Nguyễn Văn An"
-                                required
-                            >
+                    <div class="web-auth-grid">
+                        <div class="text-start">
+                            <label class="form-label">Họ tên</label>
+                            <div class="web-auth-input">
+                                <i class="bi bi-person"></i>
+                                <input
+                                    type="text"
+                                    name="ho_ten"
+                                    value="{{ old('ho_ten') }}"
+                                    placeholder="Nguyễn Văn An"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+                        <div class="text-start">
+                            <label class="form-label">Số điện thoại</label>
+                            <div class="web-auth-input">
+                                <i class="bi bi-phone"></i>
+                                <input
+                                    type="text"
+                                    name="so_dien_thoai"
+                                    value="{{ old('so_dien_thoai') }}"
+                                    placeholder="0901234567"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+                        <div class="text-start web-auth-full">
+                            <label class="form-label">Email</label>
+                            <div class="web-auth-input">
+                                <i class="bi bi-envelope"></i>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value="{{ old('email') }}"
+                                    placeholder="email@gmail.com"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="text-start">
+                            <label class="form-label">Mật khẩu</label>
+                            <div class="web-auth-input">
+                                <i class="bi bi-lock"></i>
+                                <input
+                                    type="password"
+                                    name="mat_khau"
+                                    placeholder="Tối thiểu 8 ký tự"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+                        <div class="text-start">
+                            <label class="form-label">Xác nhận mật khẩu</label>
+                            <div class="web-auth-input">
+                                <i class="bi bi-lock"></i>
+                                <input
+                                    type="password"
+                                    name="mat_khau_confirmation"
+                                    placeholder="Nhập lại mật khẩu"
+                                    required
+                                >
+                            </div>
                         </div>
                     </div>
 
-                    <div class="mb-3 text-start">
-                        <label class="form-label">Số điện thoại</label>
-                        <div class="web-auth-input">
-                            <i class="bi bi-phone"></i>
-                            <input
-                                type="text"
-                                name="so_dien_thoai"
-                                value="{{ old('so_dien_thoai') }}"
-                                placeholder="0901234567"
-                                required
-                            >
-                        </div>
-                    </div>
-
-                    <div class="mb-3 text-start">
-                        <label class="form-label">Email</label>
-                        <div class="web-auth-input">
-                            <i class="bi bi-envelope"></i>
-                            <input
-                                type="email"
-                                name="email"
-                                value="{{ old('email') }}"
-                                placeholder="email@gmail.com"
-                            >
-                        </div>
-                    </div>
-
-                    <div class="mb-3 text-start">
-                        <label class="form-label">Mật khẩu</label>
-                        <div class="web-auth-input">
-                            <i class="bi bi-lock"></i>
-                            <input
-                                type="password"
-                                name="mat_khau"
-                                placeholder="Tối thiểu 8 ký tự"
-                                required
-                            >
-                        </div>
-                    </div>
-
-                    <div class="mb-3 text-start">
-                        <label class="form-label">Xác nhận mật khẩu</label>
-                        <div class="web-auth-input">
-                            <i class="bi bi-lock"></i>
-                            <input
-                                type="password"
-                                name="mat_khau_confirmation"
-                                placeholder="Nhập lại mật khẩu"
-                                required
-                            >
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn-web-primary w-100">
+                    <button type="submit" class="btn-web-primary w-100 mt-3">
                         <i class="bi bi-person-plus"></i>
                         Đăng ký
                     </button>
