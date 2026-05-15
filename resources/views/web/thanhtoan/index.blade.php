@@ -167,16 +167,33 @@
                                 <input
                                     type="radio"
                                     name="phuong_thuc_thanh_toan"
+                                    value="payos"
+                                    {{ old('phuong_thuc_thanh_toan') === 'payos' ? 'checked' : '' }}
+                                >
+                                <div>
+                                    <div class="fw-bold">Thanh toán online qua payOS / VietQR</div>
+                                    <div class="text-muted small">
+                                        Thanh toán bằng mã VietQR/ngân hàng qua cổng payOS. Hệ thống sẽ tự cập nhật sau khi thanh toán thành công.
+                                    </div>
+                                </div>
+                            </label>
+
+                            {{-- 
+                            <label class="payment-option payment-option-pro">
+                                <input
+                                    type="radio"
+                                    name="phuong_thuc_thanh_toan"
                                     value="vnpay"
                                     {{ old('phuong_thuc_thanh_toan') === 'vnpay' ? 'checked' : '' }}
                                 >
                                 <div>
-                                    <div class="fw-bold">Thanh toán online qua VNPay</div>
+                                    <div class="fw-bold">Thanh toán online VNPay Demo</div>
                                     <div class="text-muted small">
-                                        Thanh toán bằng QR, thẻ ATM nội địa hoặc ứng dụng ngân hàng hỗ trợ VNPay.
+                                        Mô phỏng thanh toán online để demo quy trình. Không phát sinh giao dịch thật.
                                     </div>
                                 </div>
                             </label>
+                            --}}
 
                             <div class="bank-transfer-box">
                                 <div class="fw-bold mb-2">

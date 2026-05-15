@@ -34,6 +34,8 @@ Route::post('/thanh-toan/dat-hang', [ThanhtoanController::class, 'datHang'])->na
 Route::get('/thanh-toan/thanh-cong/{madonhang}', [ThanhtoanController::class, 'thanhCong'])->name('web.thanhtoan.thanhcong');
 
 Route::get('/thanh-toan/vnpay/ket-qua', [ThanhtoanController::class, 'vnpayKetQua'])->name('web.thanhtoan.vnpay.ketqua');
+Route::get('/thanh-toan/payos/ket-qua', [ThanhtoanController::class, 'payosKetQua'])->name('web.thanhtoan.payos.ketqua');
+Route::get('/thanh-toan/payos/huy', [ThanhtoanController::class, 'payosHuy'])->name('web.thanhtoan.payos.huy');
 Route::get('/thanh-toan/that-bai', [ThanhtoanController::class, 'thatBai'])->name('web.thanhtoan.thatbai');
 
 Route::get('/theo-doi-don-hang', [TheodoiController::class, 'index'])->name('web.theodoi.index');

@@ -26,6 +26,8 @@ class Donhang extends Model
         'ma_phan_hoi_thanh_toan',
         'cong_thanh_toan',
         'thanh_toan_luc',
+        'ma_thanh_toan_payos',
+        'link_thanh_toan',
         'da_hoan_kho',
         'hoan_kho_luc',
     ];
@@ -90,6 +92,7 @@ class Donhang extends Model
             'cod' => 'Thanh toán khi nhận hàng',
             'chuyen_khoan' => 'Chuyển khoản ngân hàng',
             'vnpay' => 'Thanh toán VNPay',
+            'payos' => 'Thanh toán payOS / VietQR',
             default => 'Không xác định',
         };
     }
