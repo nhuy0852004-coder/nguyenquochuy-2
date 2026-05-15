@@ -15,13 +15,44 @@ class DanhmucService
         //
     }
 
-    public function layDanhSach(?string $tukhoa = null, int $limit = 10)
+    public function layDanhSach(
+        ?string $tukhoa = null,
+        ?string $parentId = null,
+        ?string $kieuDanhMuc = null,
+        mixed $trangthai = null,
+        ?string $soLuongSanPham = null,
+        ?string $sapxep = 'thu_tu',
+        string $cotSapXep = 'thu_tu',
+        string $huongSapXep = 'asc',
+        int $limit = 10
+    ) {
+        return $this->danhmucRepository->timKiemPhanTrang(
+            $tukhoa,
+            $parentId,
+            $kieuDanhMuc,
+            $trangthai,
+            $soLuongSanPham,
+            $sapxep,
+            $cotSapXep,
+            $huongSapXep,
+            $limit
+        );
+    }
+
+    public function layCayDanhMuc()
     {
-        return $this->danhmucRepository->timKiemPhanTrang($tukhoa, $limit);
+        return $this->danhmucRepository->layDanhMucDangCay();
+    }
+
+    public function layTatCaDanhMuc()
+    {
+        return $this->danhmucRepository->layTatCaDanhMuc();
     }
 
     public function taoDanhMuc(array $dulieu, bool $trangThai): Danhmuc
     {
+        $dulieu['parent_id'] = $dulieu['parent_id'] ?? null;
+
         $dulieu['duong_dan'] = $this->taoDuongDan(
             $dulieu['duong_dan'] ?? $dulieu['ten_danh_muc']
         );
@@ -43,6 +74,8 @@ class DanhmucService
     public function capNhatDanhMuc(Danhmuc $danhmuc, array $dulieu, bool $trangThai): bool
     {
         $duLieuCu = $danhmuc->toArray();
+
+        $dulieu['parent_id'] = $dulieu['parent_id'] ?? null;
 
         $dulieu['duong_dan'] = $this->taoDuongDan(
             $dulieu['duong_dan'] ?? $dulieu['ten_danh_muc']
@@ -67,6 +100,10 @@ class DanhmucService
     {
         if ($danhmuc->sanpham()->exists()) {
             throw new \Exception('Không thể xóa danh mục này vì đang có sản phẩm thuộc danh mục.');
+        }
+
+        if ($danhmuc->con()->exists()) {
+            throw new \Exception('Không thể xóa danh mục này vì đang có danh mục con.');
         }
 
         $this->nhatkyhoatdongService->ghiXoa(

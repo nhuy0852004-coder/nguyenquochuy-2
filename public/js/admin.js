@@ -55,43 +55,50 @@ document.addEventListener('DOMContentLoaded', function () {
 
     khoiPhucTrangThaiSidebar();
 
-    document.querySelectorAll('form[data-confirm]').forEach(function (form) {
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();
+    document.addEventListener('submit', function (event) {
+        const form = event.target.closest('form[data-confirm]');
 
-            const title = form.dataset.confirmTitle || 'Xác nhận thao tác';
-            const text = form.dataset.confirm || 'Bạn có chắc muốn thực hiện thao tác này không?';
-            const icon = form.dataset.confirmIcon || 'warning';
-            const confirmText = form.dataset.confirmButton || 'Đồng ý';
-            const cancelText = form.dataset.cancelButton || 'Hủy';
+        if (!form) {
+            return;
+        }
 
-            Swal.fire({
-                title: title,
-                text: text,
-                icon: icon,
-                showCancelButton: true,
-                confirmButtonText: confirmText,
-                cancelButtonText: cancelText,
-                reverseButtons: true,
-                focusCancel: true,
-                customClass: {
-                    popup: 'swal-admin-popup',
-                    title: 'swal-admin-title',
-                    htmlContainer: 'swal-admin-text',
-                    confirmButton: 'swal-admin-confirm',
-                    cancelButton: 'swal-admin-cancel'
-                },
-                buttonsStyling: false
-            }).then(function (result) {
-                if (result.isConfirmed) {
-                    if (pageLoading) {
-                        pageLoading.classList.add('show');
-                    }
+        event.preventDefault();
 
-                    form.removeAttribute('data-confirm');
-                    form.submit();
+        const title = form.dataset.confirmTitle || 'Xác nhận thao tác';
+        const text = form.dataset.confirm || 'Bạn có chắc muốn thực hiện thao tác này không?';
+        const icon = form.dataset.confirmIcon || 'warning';
+        const confirmText = form.dataset.confirmButton || 'Đồng ý';
+        const cancelText = form.dataset.cancelButton || 'Hủy';
+
+        Swal.fire({
+            title: title,
+            text: text,
+            icon: icon,
+            showCancelButton: true,
+            confirmButtonText: confirmText,
+            cancelButtonText: cancelText,
+            reverseButtons: true,
+            focusCancel: true,
+            customClass: {
+                popup: 'swal-admin-popup',
+                title: 'swal-admin-title',
+                htmlContainer: 'swal-admin-text',
+                confirmButton: 'swal-admin-confirm',
+                cancelButton: 'swal-admin-cancel'
+            },
+            buttonsStyling: false
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                form.removeAttribute('data-confirm');
+
+                const pageLoading = document.getElementById('pageLoading');
+
+                if (pageLoading) {
+                    pageLoading.classList.add('show');
                 }
-            });
+
+                form.submit();
+            }
         });
     });
 
@@ -118,6 +125,152 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     });
+
+    const formLocDanhMuc = document.getElementById('formLocDanhMuc');
+    const danhMucKetQuaWrap = document.getElementById('danhMucKetQuaWrap');
+
+    if (formLocDanhMuc && danhMucKetQuaWrap) {
+        let filterTimer = null;
+
+        formLocDanhMuc.querySelectorAll('.auto-filter').forEach(function (select) {
+            select.addEventListener('change', function () {
+                locDanhMucAjax();
+            });
+        });
+
+        const inputTuKhoa = formLocDanhMuc.querySelector('input[name="tu_khoa"]');
+
+        if (inputTuKhoa) {
+            inputTuKhoa.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    locDanhMucAjax();
+                }
+            });
+
+            inputTuKhoa.addEventListener('input', function () {
+                clearTimeout(filterTimer);
+
+                filterTimer = setTimeout(function () {
+                    locDanhMucAjax();
+                }, 600);
+            });
+        }
+
+        formLocDanhMuc.addEventListener('submit', function (event) {
+            event.preventDefault();
+            locDanhMucAjax();
+        });
+
+        document.addEventListener('click', function (event) {
+            const link = event.target.closest('#danhMucKetQuaWrap .pagination a');
+
+            if (!link) {
+                return;
+            }
+
+            event.preventDefault();
+            locDanhMucAjax(link.href);
+        });
+
+        document.addEventListener('click', function (event) {
+            const sortButton = event.target.closest('#danhMucKetQuaWrap [data-sort-column]');
+
+            if (!sortButton) {
+                return;
+            }
+
+            event.preventDefault();
+
+            const cotInput = document.getElementById('cotSapXepDanhMuc');
+            const huongInput = document.getElementById('huongSapXepDanhMuc');
+
+            if (!cotInput || !huongInput) {
+                return;
+            }
+
+            const cotMoi = sortButton.dataset.sortColumn;
+            const cotHienTai = cotInput.value;
+            const huongHienTai = huongInput.value;
+
+            cotInput.value = cotMoi;
+
+            if (cotMoi === cotHienTai) {
+                huongInput.value = huongHienTai === 'asc' ? 'desc' : 'asc';
+            } else {
+                huongInput.value = 'asc';
+            }
+
+            locDanhMucAjax();
+        });
+    }
+
+    function locDanhMucAjax(customUrl = null) {
+        const formLocDanhMuc = document.getElementById('formLocDanhMuc');
+        const danhMucKetQuaWrap = document.getElementById('danhMucKetQuaWrap');
+
+        if (!formLocDanhMuc || !danhMucKetQuaWrap) {
+            return;
+        }
+
+        const formData = new FormData(formLocDanhMuc);
+        const params = new URLSearchParams(formData);
+        const url = customUrl || (formLocDanhMuc.action + '?' + params.toString());
+
+        danhMucKetQuaWrap.classList.add('ajax-loading-soft');
+
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'text/html',
+            }
+        })
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error('Không thể tải dữ liệu danh mục.');
+                }
+
+                return response.text();
+            })
+            .then(function (html) {
+                danhMucKetQuaWrap.innerHTML = html;
+
+                if (!customUrl) {
+                    window.history.replaceState({}, '', url);
+                } else {
+                    window.history.replaceState({}, '', customUrl);
+                }
+            })
+            .catch(function () {
+                alert('Có lỗi xảy ra khi lọc danh mục. Vui lòng thử lại.');
+            })
+            .finally(function () {
+                danhMucKetQuaWrap.classList.remove('ajax-loading-soft');
+            });
+    }
+
+    const btnXoaLocDanhMuc = document.getElementById('btnXoaLocDanhMuc');
+
+    if (btnXoaLocDanhMuc && formLocDanhMuc) {
+        btnXoaLocDanhMuc.addEventListener('click', function () {
+            formLocDanhMuc.reset();
+
+            formLocDanhMuc.querySelectorAll('input, select').forEach(function (field) {
+                if (field.name === 'sap_xep') {
+                    field.value = 'thu_tu';
+                } else if (field.name === 'cot_sap_xep') {
+                    field.value = 'thu_tu';
+                } else if (field.name === 'huong_sap_xep') {
+                    field.value = 'asc';
+                } else {
+                    field.value = '';
+                }
+            });
+
+            locDanhMucAjax(formLocDanhMuc.action);
+        });
+    }
 
     const toastThongBao = document.getElementById('toastThongBao');
 

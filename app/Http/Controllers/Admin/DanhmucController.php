@@ -19,10 +19,67 @@ class DanhmucController extends Controller
     public function index(Request $request)
     {
         $tukhoa = $request->input('tu_khoa');
+        $parentId = $request->input('parent_id');
+        $kieuDanhMuc = $request->input('kieu_danh_muc');
+        $trangthai = $request->input('trang_thai');
+        $soLuongSanPham = $request->input('so_luong_san_pham');
+        $sapxep = $request->input('sap_xep', 'thu_tu');
+        $cotSapXep = $request->input('cot_sap_xep', 'thu_tu');
+        $huongSapXep = $request->input('huong_sap_xep', 'asc');
 
-        $danhsachdanhmuc = $this->danhmucService->layDanhSach($tukhoa);
+        $cotHopLe = ['id', 'ten_danh_muc', 'thu_tu', 'trang_thai', 'created_at', 'sanpham_count', 'con_count'];
 
-        return view('admin.danhmuc.index', compact('danhsachdanhmuc', 'tukhoa'));
+        if (! in_array($cotSapXep, $cotHopLe, true)) {
+            $cotSapXep = 'thu_tu';
+        }
+
+        if (! in_array(strtolower($huongSapXep), ['asc', 'desc'], true)) {
+            $huongSapXep = 'asc';
+        }
+
+        $danhsachdanhmuc = $this->danhmucService->layDanhSach(
+            $tukhoa,
+            $parentId,
+            $kieuDanhMuc,
+            $trangthai,
+            $soLuongSanPham,
+            $sapxep,
+            $cotSapXep,
+            $huongSapXep
+        );
+
+        $caydanhmuc = $this->danhmucService->layCayDanhMuc();
+        $tatcadanhmuc = $this->danhmucService->layTatCaDanhMuc();
+
+        if ($request->ajax()) {
+            return view('admin.danhmuc._ketqua', compact(
+                'danhsachdanhmuc',
+                'caydanhmuc',
+                'tatcadanhmuc',
+                'tukhoa',
+                'parentId',
+                'kieuDanhMuc',
+                'trangthai',
+                'soLuongSanPham',
+                'sapxep',
+                'cotSapXep',
+                'huongSapXep'
+            ));
+        }
+
+        return view('admin.danhmuc.index', compact(
+            'danhsachdanhmuc',
+            'caydanhmuc',
+            'tatcadanhmuc',
+            'tukhoa',
+            'parentId',
+            'kieuDanhMuc',
+            'trangthai',
+            'soLuongSanPham',
+            'sapxep',
+            'cotSapXep',
+            'huongSapXep'
+        ));
     }
 
     public function store(DanhmucRequest $request)

@@ -36,30 +36,57 @@
     @endif
 
     <div class="bo-loc">
-        <form action="{{ route('admin.danhmuc.index') }}" method="GET" class="bo-loc-form">
+        <form
+            action="{{ route('admin.danhmuc.index') }}"
+            method="GET"
+            class="category-filter-grid category-filter-grid-advanced"
+            id="formLocDanhMuc"
+            data-skip-loading="true"
+        >
+            <input type="hidden" name="cot_sap_xep" id="cotSapXepDanhMuc" value="{{ $cotSapXep ?? 'thu_tu' }}">
+            <input type="hidden" name="huong_sap_xep" id="huongSapXepDanhMuc" value="{{ $huongSapXep ?? 'asc' }}">
             <div class="bo-loc-input">
                 <i class="bi bi-search"></i>
-                <input
-                    type="text"
-                    name="tu_khoa"
-                    value="{{ $tukhoa }}"
-                    placeholder="Tìm kiếm theo tên danh mục, đường dẫn hoặc mô tả..."
-                >
+                <input type="text" name="tu_khoa" value="{{ $tukhoa }}" placeholder="Tìm kiếm theo tên danh mục, đường dẫn hoặc mô tả...">
             </div>
 
+            <select name="parent_id" class="form-select auto-filter">
+                <option value="">Tất cả danh mục cha</option>
+                <option value="goc" {{ $parentId === 'goc' ? 'selected' : '' }}>Chỉ danh mục gốc</option>
+                @include('admin.danhmuc._option-cay', ['danhsach' => $caydanhmuc, 'selected' => $parentId, 'cap' => 0])
+            </select>
+
+            <select name="kieu_danh_muc" class="form-select auto-filter">
+                <option value="">Tất cả cấp</option>
+                <option value="goc" {{ $kieuDanhMuc === 'goc' ? 'selected' : '' }}>Danh mục gốc</option>
+                <option value="con" {{ $kieuDanhMuc === 'con' ? 'selected' : '' }}>Danh mục con</option>
+            </select>
+
+            <select name="trang_thai" class="form-select auto-filter">
+                <option value="">Tất cả trạng thái</option>
+                <option value="1" {{ $trangthai === '1' ? 'selected' : '' }}>Đang bật</option>
+                <option value="0" {{ $trangthai === '0' ? 'selected' : '' }}>Đang tắt</option>
+            </select>
+
+            <select name="so_luong_san_pham" class="form-select auto-filter">
+                <option value="">Tất cả số lượng SP</option>
+                <option value="khong_co" {{ $soLuongSanPham === 'khong_co' ? 'selected' : '' }}>Chưa có sản phẩm</option>
+                <option value="co_san_pham" {{ $soLuongSanPham === 'co_san_pham' ? 'selected' : '' }}>Có sản phẩm</option>
+                <option value="duoi_5" {{ $soLuongSanPham === 'duoi_5' ? 'selected' : '' }}>Dưới 5 sản phẩm</option>
+                <option value="tu_5_20" {{ $soLuongSanPham === 'tu_5_20' ? 'selected' : '' }}>Từ 5 - 20 sản phẩm</option>
+                <option value="tren_20" {{ $soLuongSanPham === 'tren_20' ? 'selected' : '' }}>Trên 20 sản phẩm</option>
+            </select>
+
+            <select name="sap_xep" class="form-select auto-filter">
+                <option value="thu_tu" {{ $sapxep === 'thu_tu' ? 'selected' : '' }}>Sắp xếp theo thứ tự</option>
+                <option value="moi_tao" {{ $sapxep === 'moi_tao' ? 'selected' : '' }}>Mới tạo trước</option>
+                <option value="cu_nhat" {{ $sapxep === 'cu_nhat' ? 'selected' : '' }}>Cũ nhất trước</option>
+                <option value="nhieu_san_pham" {{ $sapxep === 'nhieu_san_pham' ? 'selected' : '' }}>Nhiều sản phẩm nhất</option>
+                <option value="nhieu_danh_muc_con" {{ $sapxep === 'nhieu_danh_muc_con' ? 'selected' : '' }}>Nhiều danh mục con nhất</option>
+                <option value="ten_az" {{ $sapxep === 'ten_az' ? 'selected' : '' }}>Tên A-Z</option>
+            </select>
+
             <div class="d-flex gap-2">
-                <button type="submit" class="btn-phu">
-                    <i class="bi bi-search"></i>
-                    Tìm kiếm
-                </button>
-
-                @if ($tukhoa)
-                    <a href="{{ route('admin.danhmuc.index') }}" class="btn-phu">
-                        <i class="bi bi-x-circle"></i>
-                        Xóa lọc
-                    </a>
-                @endif
-
                 <button type="button" class="btn-chinh" data-bs-toggle="modal" data-bs-target="#modalThemDanhMuc">
                     <i class="bi bi-plus-circle"></i>
                     Thêm danh mục
@@ -68,133 +95,8 @@
         </form>
     </div>
 
-    <div class="content-card">
-        <div class="content-card-header">
-            <h2>Danh sách danh mục</h2>
-            <span class="text-muted small">
-                Tổng: {{ $danhsachdanhmuc->total() }} danh mục
-            </span>
-        </div>
-
-        <div class="table-responsive">
-            <table class="table align-middle">
-                <thead>
-                    <tr>
-                        <th style="width: 70px;">ID</th>
-                        <th>Tên danh mục</th>
-                        <th>Đường dẫn</th>
-                        <th>Mô tả</th>
-                        <th style="width: 100px;">Thứ tự</th>
-                        <th style="width: 130px;">Trạng thái</th>
-                        <th style="width: 160px;">Thao tác</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @forelse ($danhsachdanhmuc as $danhmuc)
-                        <tr>
-                            <td class="fw-semibold">#{{ $danhmuc->id }}</td>
-
-                            <td>
-                                <div class="fw-semibold">{{ $danhmuc->ten_danh_muc }}</div>
-                                <div class="text-muted small">
-                                    Tạo lúc {{ $danhmuc->created_at->format('d/m/Y H:i') }}
-                                </div>
-                            </td>
-
-                            <td>
-                                <span class="text-muted">/{{ $danhmuc->duong_dan }}</span>
-                            </td>
-
-                            <td>
-                                <span class="text-muted">
-                                    {{ $danhmuc->mo_ta ?: 'Chưa có mô tả' }}
-                                </span>
-                            </td>
-
-                            <td>{{ $danhmuc->thu_tu }}</td>
-
-                            <td>
-                                @if ($danhmuc->trang_thai)
-                                    <span class="badge-trang-thai badge-bat">Đang bật</span>
-                                @else
-                                    <span class="badge-trang-thai badge-tat">Đang tắt</span>
-                                @endif
-                            </td>
-
-                            <td>
-                                <div class="table-actions">
-                                    <button
-                                        type="button"
-                                        class="btn-nho"
-                                        title="Sửa"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#modalSuaDanhMuc{{ $danhmuc->id }}"
-                                    >
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-
-                                    <form action="{{ route('admin.danhmuc.doitrangthai', $danhmuc) }}" method="POST">
-                                        @csrf
-                                        @method('PATCH')
-
-                                        <button
-                                            type="submit"
-                                            class="btn-nho"
-                                            title="Đổi trạng thái"
-                                        >
-                                            @if ($danhmuc->trang_thai)
-                                                <i class="bi bi-toggle-on"></i>
-                                            @else
-                                                <i class="bi bi-toggle-off"></i>
-                                            @endif
-                                        </button>
-                                    </form>
-
-                                    <form
-                                        action="{{ route('admin.danhmuc.destroy', $danhmuc) }}"
-                                        method="POST"
-                                        data-confirm="Bạn có chắc muốn xóa danh mục này không?"
-                                    >
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button type="submit" class="btn-nguyhiem" title="Xóa">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-
-                    @empty
-                        <tr>
-                            <td colspan="7">
-                                <div class="empty-state">
-                                    <div class="empty-state-icon">
-                                        <i class="bi bi-tags"></i>
-                                    </div>
-                                    <h5 class="fw-bold">Chưa có danh mục nào</h5>
-                                    <p class="text-muted mb-3">
-                                        Hãy tạo danh mục đầu tiên để bắt đầu quản lý sản phẩm.
-                                    </p>
-                                    <button type="button" class="btn-chinh" data-bs-toggle="modal" data-bs-target="#modalThemDanhMuc">
-                                        <i class="bi bi-plus-circle"></i>
-                                        Thêm danh mục
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-
-        @if ($danhsachdanhmuc->hasPages())
-            <div class="p-3 border-top">
-                {{ $danhsachdanhmuc->links() }}
-            </div>
-        @endif
+    <div id="danhMucKetQuaWrap">
+        @include('admin.danhmuc._ketqua')
     </div>
 
     @foreach ($danhsachdanhmuc as $danhmuc)
@@ -203,55 +105,43 @@
                 <form action="{{ route('admin.danhmuc.update', $danhmuc) }}" method="POST" class="modal-content">
                     @csrf
                     @method('PUT')
-
                     <div class="modal-header">
                         <h5 class="modal-title">Sửa danh mục</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Tên danh mục <span class="text-danger">*</span></label>
                             <input type="text" name="ten_danh_muc" class="form-control" value="{{ old('ten_danh_muc', $danhmuc->ten_danh_muc) }}" required>
                         </div>
-
+                        <div class="mb-3">
+                            <label class="form-label">Danh mục cha</label>
+                            <select name="parent_id" class="form-select">
+                                <option value="">Không có - Danh mục gốc</option>
+                                @include('admin.danhmuc._option-cay', ['danhsach' => $caydanhmuc, 'selected' => old('parent_id', $danhmuc->parent_id), 'cap' => 0, 'boquaId' => $danhmuc->id])
+                            </select>
+                            <div class="form-text">Không thể chọn chính nó hoặc danh mục con của nó làm cha.</div>
+                        </div>
                         <div class="mb-3">
                             <label class="form-label">Đường dẫn</label>
                             <input type="text" name="duong_dan" class="form-control" value="{{ old('duong_dan', $danhmuc->duong_dan) }}">
-                            <div class="form-text">Có thể để trống, hệ thống tự tạo từ tên danh mục.</div>
                         </div>
-
                         <div class="mb-3">
                             <label class="form-label">Mô tả</label>
                             <textarea name="mo_ta" rows="3" class="form-control">{{ old('mo_ta', $danhmuc->mo_ta) }}</textarea>
                         </div>
-
                         <div class="mb-3">
                             <label class="form-label">Thứ tự hiển thị</label>
                             <input type="number" name="thu_tu" class="form-control" value="{{ old('thu_tu', $danhmuc->thu_tu) }}" min="0">
                         </div>
-
                         <div class="form-check form-switch">
-                            <input
-                                class="form-check-input"
-                                type="checkbox"
-                                name="trang_thai"
-                                value="1"
-                                id="trangThaiSua{{ $danhmuc->id }}"
-                                {{ $danhmuc->trang_thai ? 'checked' : '' }}
-                            >
-                            <label class="form-check-label" for="trangThaiSua{{ $danhmuc->id }}">
-                                Bật hiển thị danh mục
-                            </label>
+                            <input class="form-check-input" type="checkbox" name="trang_thai" value="1" id="trangThaiSua{{ $danhmuc->id }}" {{ $danhmuc->trang_thai ? 'checked' : '' }}>
+                            <label class="form-check-label" for="trangThaiSua{{ $danhmuc->id }}">Bật hiển thị danh mục</label>
                         </div>
                     </div>
-
                     <div class="modal-footer">
                         <button type="button" class="btn-phu" data-bs-dismiss="modal">Hủy</button>
-                        <button type="submit" class="btn-chinh">
-                            <i class="bi bi-save"></i>
-                            Lưu thay đổi
-                        </button>
+                        <button type="submit" class="btn-chinh"><i class="bi bi-save"></i>Lưu thay đổi</button>
                     </div>
                 </form>
             </div>
@@ -259,96 +149,73 @@
     @endforeach
 
     <div class="modal fade" id="modalThemDanhMuc" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <form action="{{ route('admin.danhmuc.store') }}" method="POST" class="modal-content">
+        <div class="modal-dialog modal-xl modal-dialog-centered category-modal-wide">
+            <form action="{{ route('admin.danhmuc.store') }}" method="POST" class="modal-content category-modal">
                 @csrf
-
                 <div class="modal-header">
-                    <h5 class="modal-title">Thêm danh mục mới</h5>
+                    <div>
+                        <h5 class="modal-title">Thêm danh mục mới</h5>
+                        <div class="modal-subtitle">Tạo danh mục cha hoặc danh mục con để quản lý sản phẩm rõ ràng hơn.</div>
+                    </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Tên danh mục <span class="text-danger">*</span></label>
-                        <input
-                            type="text"
-                            name="ten_danh_muc"
-                            class="form-control"
-                            value="{{ old('ten_danh_muc') }}"
-                            placeholder="Ví dụ: Áo thun nam"
-                            required
-                        >
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Đường dẫn</label>
-                        <input
-                            type="text"
-                            name="duong_dan"
-                            class="form-control"
-                            value="{{ old('duong_dan') }}"
-                            placeholder="Ví dụ: ao-thun-nam"
-                        >
-                        <div class="form-text">Có thể để trống, hệ thống tự tạo từ tên danh mục.</div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Mô tả</label>
-                        <textarea
-                            name="mo_ta"
-                            rows="3"
-                            class="form-control"
-                            placeholder="Mô tả ngắn về danh mục..."
-                        >{{ old('mo_ta') }}</textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Thứ tự hiển thị</label>
-                        <input
-                            type="number"
-                            name="thu_tu"
-                            class="form-control"
-                            value="{{ old('thu_tu', 0) }}"
-                            min="0"
-                        >
-                    </div>
-
-                    <div class="form-check form-switch">
-                        <input
-                            class="form-check-input"
-                            type="checkbox"
-                            name="trang_thai"
-                            value="1"
-                            id="trangThaiThem"
-                            checked
-                        >
-                        <label class="form-check-label" for="trangThaiThem">
-                            Bật hiển thị danh mục
-                        </label>
+                    <div class="category-form-grid">
+                        <div class="category-form-main">
+                            <div class="form-section-title"><i class="bi bi-info-circle"></i>Thông tin danh mục</div>
+                            <div class="mb-3">
+                                <label class="form-label">Tên danh mục <span class="text-danger">*</span></label>
+                                <input type="text" name="ten_danh_muc" class="form-control" value="{{ old('ten_danh_muc') }}" placeholder="Ví dụ: Áo thun nam" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Đường dẫn</label>
+                                <input type="text" name="duong_dan" class="form-control" value="{{ old('duong_dan') }}" placeholder="Ví dụ: ao-thun-nam">
+                                <div class="form-text">Có thể để trống, hệ thống sẽ tự tạo từ tên danh mục.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Mô tả</label>
+                                <textarea name="mo_ta" rows="4" class="form-control" placeholder="Mô tả ngắn về danh mục...">{{ old('mo_ta') }}</textarea>
+                            </div>
+                        </div>
+                        <div class="category-form-side">
+                            <div class="form-section-title"><i class="bi bi-diagram-3"></i>Cấu trúc hiển thị</div>
+                            <div class="mb-3">
+                                <label class="form-label">Danh mục cha</label>
+                                <select name="parent_id" class="form-select">
+                                    <option value="">Không có - Danh mục gốc</option>
+                                    @include('admin.danhmuc._option-cay', ['danhsach' => $caydanhmuc, 'selected' => old('parent_id'), 'cap' => 0])
+                                </select>
+                                <div class="form-text">Chọn danh mục cha nếu muốn tạo danh mục con.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Thứ tự hiển thị</label>
+                                <input type="number" name="thu_tu" class="form-control" value="{{ old('thu_tu', 0) }}" min="0">
+                                <div class="form-text">Số nhỏ hơn sẽ được ưu tiên hiển thị trước.</div>
+                            </div>
+                            <div class="category-status-box">
+                                <div>
+                                    <div class="fw-bold">Trạng thái hiển thị</div>
+                                    <div class="text-muted small">Bật để danh mục có thể sử dụng trên website.</div>
+                                </div>
+                                <div class="form-check form-switch m-0">
+                                    <input class="form-check-input" type="checkbox" name="trang_thai" value="1" id="trangThaiThem" checked>
+                                </div>
+                            </div>
+                            <div class="category-help-box">
+                                <div class="category-help-icon"><i class="bi bi-lightbulb"></i></div>
+                                <div>
+                                    <strong>Gợi ý</strong>
+                                    <p>Ví dụ: “Thời trang nam” là danh mục cha, “Áo thun nam” là danh mục con.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
                 <div class="modal-footer">
                     <button type="button" class="btn-phu" data-bs-dismiss="modal">Hủy</button>
-                    <button type="submit" class="btn-chinh">
-                        <i class="bi bi-plus-circle"></i>
-                        Thêm danh mục
-                    </button>
+                    <button type="submit" class="btn-chinh"><i class="bi bi-plus-circle"></i>Thêm danh mục</button>
                 </div>
             </form>
         </div>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        const toastThongBao = document.getElementById('toastThongBao');
-
-        if (toastThongBao) {
-            setTimeout(() => {
-                toastThongBao.style.display = 'none';
-            }, 3000);
-        }
-    </script>
-@endpush
