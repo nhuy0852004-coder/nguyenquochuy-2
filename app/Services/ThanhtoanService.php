@@ -63,7 +63,12 @@ class ThanhtoanService
                 'phi_van_chuyen' => $phiVanChuyen,
                 'tong_tien' => $tongTien,
                 'phuong_thuc_thanh_toan' => $dulieu['phuong_thuc_thanh_toan'],
-                'trang_thai_thanh_toan' => 'chua_thanh_toan',
+                'trang_thai_thanh_toan' => $dulieu['phuong_thuc_thanh_toan'] === 'vnpay'
+                    ? 'cho_thanh_toan'
+                    : 'chua_thanh_toan',
+                'cong_thanh_toan' => $dulieu['phuong_thuc_thanh_toan'] === 'vnpay'
+                    ? 'vnpay'
+                    : null,
                 'trang_thai_don_hang' => 'cho_xac_nhan',
             ]);
 

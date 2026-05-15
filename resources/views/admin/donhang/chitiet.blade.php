@@ -211,6 +211,27 @@
                     <span>Trạng thái thanh toán</span>
                     <strong>{{ $donhang->trangThaiThanhToanText() }}</strong>
                 </div>
+
+                @if ($donhang->cong_thanh_toan)
+                    <div class="order-line">
+                        <span>Cổng thanh toán</span>
+                        <strong>{{ strtoupper($donhang->cong_thanh_toan) }}</strong>
+                    </div>
+                @endif
+
+                @if ($donhang->ma_giao_dich_thanh_toan)
+                    <div class="order-line">
+                        <span>Mã giao dịch</span>
+                        <strong>{{ $donhang->ma_giao_dich_thanh_toan }}</strong>
+                    </div>
+                @endif
+
+                @if ($donhang->thanh_toan_luc)
+                    <div class="order-line">
+                        <span>Thanh toán lúc</span>
+                        <strong>{{ $donhang->thanh_toan_luc->format('d/m/Y H:i') }}</strong>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

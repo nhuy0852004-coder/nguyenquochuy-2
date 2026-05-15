@@ -163,6 +163,21 @@
                                 </div>
                             </label>
 
+                            <label class="payment-option payment-option-pro">
+                                <input
+                                    type="radio"
+                                    name="phuong_thuc_thanh_toan"
+                                    value="vnpay"
+                                    {{ old('phuong_thuc_thanh_toan') === 'vnpay' ? 'checked' : '' }}
+                                >
+                                <div>
+                                    <div class="fw-bold">Thanh toán online qua VNPay</div>
+                                    <div class="text-muted small">
+                                        Thanh toán bằng QR, thẻ ATM nội địa hoặc ứng dụng ngân hàng hỗ trợ VNPay.
+                                    </div>
+                                </div>
+                            </label>
+
                             <div class="bank-transfer-box">
                                 <div class="fw-bold mb-2">
                                     <i class="bi bi-bank me-1"></i>
@@ -185,7 +200,8 @@
                                 </div>
 
                                 <div class="text-muted small mt-2">
-                                    Nội dung chuyển khoản: Số điện thoại đặt hàng hoặc mã đơn sau khi đặt.
+                                    Nếu chọn chuyển khoản thủ công, vui lòng chuyển khoản theo thông tin trên.
+                                    Nếu chọn VNPay, hệ thống sẽ chuyển bạn sang cổng thanh toán online.
                                 </div>
                             </div>
                         </div>

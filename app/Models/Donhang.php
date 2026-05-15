@@ -22,6 +22,10 @@ class Donhang extends Model
         'phuong_thuc_thanh_toan',
         'trang_thai_thanh_toan',
         'trang_thai_don_hang',
+        'ma_giao_dich_thanh_toan',
+        'ma_phan_hoi_thanh_toan',
+        'cong_thanh_toan',
+        'thanh_toan_luc',
         'da_hoan_kho',
         'hoan_kho_luc',
     ];
@@ -30,8 +34,10 @@ class Donhang extends Model
         'tam_tinh' => 'integer',
         'phi_van_chuyen' => 'integer',
         'tong_tien' => 'integer',
+        'cong_thanh_toan' => 'integer',
         'da_hoan_kho' => 'boolean',
         'hoan_kho_luc' => 'datetime',
+        'thanh_toan_luc' => 'datetime',
     ];
 
     public const TRANG_THAI_CHO_XAC_NHAN = 'cho_xac_nhan';
@@ -83,6 +89,7 @@ class Donhang extends Model
         return match ($this->phuong_thuc_thanh_toan) {
             'cod' => 'Thanh toán khi nhận hàng',
             'chuyen_khoan' => 'Chuyển khoản ngân hàng',
+            'vnpay' => 'Thanh toán VNPay',
             default => 'Không xác định',
         };
     }
@@ -91,7 +98,9 @@ class Donhang extends Model
     {
         return match ($this->trang_thai_thanh_toan) {
             'chua_thanh_toan' => 'Chưa thanh toán',
+            'cho_thanh_toan' => 'Chờ thanh toán',
             'da_thanh_toan' => 'Đã thanh toán',
+            'thanh_toan_that_bai' => 'Thanh toán thất bại',
             default => 'Không xác định',
         };
     }

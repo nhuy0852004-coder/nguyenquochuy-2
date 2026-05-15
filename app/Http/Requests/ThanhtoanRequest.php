@@ -47,7 +47,7 @@ class ThanhtoanRequest extends FormRequest
             ],
             'phuong_thuc_thanh_toan' => [
                 'required',
-                'in:cod,chuyen_khoan',
+                'in:cod,chuyen_khoan,vnpay',
             ],
         ];
     }
