@@ -40,6 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'khachhang' => [
+            'driver' => 'session',
+            'provider' => 'khachhang',
+        ],
     ],
 
     /*
@@ -63,6 +68,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\Nguoidung::class,
+        ],
+
+        'khachhang' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Khachhang::class,
         ],
     ],
 

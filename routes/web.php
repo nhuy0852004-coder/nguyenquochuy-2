@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\DonhangController;
 use App\Http\Controllers\Admin\KhachhangController;
 use App\Http\Controllers\Admin\BaocaoController;
 use App\Http\Controllers\Admin\CaidatcuahangController;
-use App\Http\Controllers\Admin\SanphamController;
+use App\Http\Controllers\Admin\SanphamController;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 use App\Http\Controllers\Admin\ThongbaoController;
 use App\Http\Controllers\Admin\XacthucController;
 use App\Http\Controllers\Admin\NguoidungController;
@@ -14,11 +14,27 @@ use App\Http\Controllers\Admin\NhatkyhoatdongController;
 use App\Http\Controllers\Web\GiohangController;
 use App\Http\Controllers\Web\SanphamController as WebSanphamController;
 use App\Http\Controllers\Web\ThanhtoanController;
+use App\Http\Controllers\Web\TaikhoanController;
 use App\Http\Controllers\Web\TheodoiController;
 use App\Http\Controllers\Web\TrangchuController;
+use App\Http\Controllers\Web\XacthuckhachhangController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [TrangchuController::class, 'index'])->name('web.trangchu');
+
+Route::get('/dang-nhap', [XacthuckhachhangController::class, 'hienThiDangNhap'])->name('web.dangnhap');
+Route::post('/dang-nhap', [XacthuckhachhangController::class, 'dangNhap'])->name('web.xuly.dangnhap');
+Route::get('/dang-nhap/google', [XacthuckhachhangController::class, 'dangNhapGoogle'])->name('web.dangnhap.google');
+Route::get('/dang-nhap/google/callback', [XacthuckhachhangController::class, 'dangNhapGoogleCallback'])->name('web.dangnhap.google.callback');
+
+Route::get('/dang-ky', [XacthuckhachhangController::class, 'hienThiDangKy'])->name('web.dangky');
+Route::post('/dang-ky', [XacthuckhachhangController::class, 'dangKy'])->name('web.xuly.dangky');
+
+Route::post('/dang-xuat', [XacthuckhachhangController::class, 'dangXuat'])->name('web.dangxuat');
+
+Route::middleware('kiemtrakhachhang')->group(function () {
+    Route::get('/tai-khoan', [TaikhoanController::class, 'index'])->name('web.taikhoan.index');
+});
 
 Route::get('/san-pham', [WebSanphamController::class, 'index'])->name('web.sanpham.index');
 Route::get('/san-pham/{duongdan}', [WebSanphamController::class, 'chitiet'])->name('web.sanpham.chitiet');

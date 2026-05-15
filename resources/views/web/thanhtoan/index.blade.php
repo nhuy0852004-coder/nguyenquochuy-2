@@ -3,6 +3,10 @@
 @section('tieude', 'Thanh toán')
 
 @section('noidung')
+    @php
+        $khachDangNhap = auth('khachhang')->user();
+    @endphp
+
     <div class="container">
         <div class="breadcrumb-web">
             <a href="{{ route('web.trangchu') }}">Trang chủ</a>
@@ -71,7 +75,7 @@
                                         type="text"
                                         name="ho_ten"
                                         class="form-control"
-                                        value="{{ old('ho_ten') }}"
+                                        value="{{ old('ho_ten', $khachDangNhap?->ho_ten) }}"
                                         placeholder="Ví dụ: Nguyễn Văn An"
                                         required
                                     >
@@ -83,7 +87,7 @@
                                         type="text"
                                         name="so_dien_thoai"
                                         class="form-control"
-                                        value="{{ old('so_dien_thoai') }}"
+                                        value="{{ old('so_dien_thoai', $khachDangNhap?->so_dien_thoai) }}"
                                         placeholder="Ví dụ: 0901234567"
                                         required
                                     >
@@ -95,7 +99,7 @@
                                         type="email"
                                         name="email"
                                         class="form-control"
-                                        value="{{ old('email') }}"
+                                        value="{{ old('email', $khachDangNhap?->email) }}"
                                         placeholder="Ví dụ: nguyenvanan@gmail.com"
                                     >
                                 </div>
@@ -106,7 +110,7 @@
                                         type="text"
                                         name="dia_chi"
                                         class="form-control"
-                                        value="{{ old('dia_chi') }}"
+                                        value="{{ old('dia_chi', $khachDangNhap?->dia_chi) }}"
                                         placeholder="Số nhà, phường/xã, quận/huyện, tỉnh/thành"
                                         required
                                     >

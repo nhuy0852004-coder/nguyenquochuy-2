@@ -40,16 +40,29 @@ class ThanhtoanService
             $phiVanChuyen = $this->tinhPhiVanChuyen($tamTinh);
             $tongTien = $tamTinh + $phiVanChuyen;
 
-            $khachhang = Khachhang::updateOrCreate(
-                [
-                    'so_dien_thoai' => $dulieu['so_dien_thoai'],
-                ],
-                [
+            $khachDangNhap = auth('khachhang')->user();
+
+            if ($khachDangNhap) {
+                $khachhang = $khachDangNhap;
+
+                $khachhang->update([
                     'ho_ten' => $dulieu['ho_ten'],
-                    'email' => $dulieu['email'] ?? null,
+                    'so_dien_thoai' => $dulieu['so_dien_thoai'],
+                    'email' => $dulieu['email'] ?? $khachhang->email,
                     'dia_chi' => $dulieu['dia_chi'],
-                ]
-            );
+                ]);
+            } else {
+                $khachhang = Khachhang::updateOrCreate(
+                    [
+                        'so_dien_thoai' => $dulieu['so_dien_thoai'],
+                    ],
+                    [
+                        'ho_ten' => $dulieu['ho_ten'],
+                        'email' => $dulieu['email'] ?? null,
+                        'dia_chi' => $dulieu['dia_chi'],
+                    ]
+                );
+            }
 
             $donhang = Donhang::create([
                 'khachhang_id' => $khachhang->id,

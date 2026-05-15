@@ -4568,3 +4568,227 @@ textarea {
         text-align: left;
     }
 }
+
+.web-auth-section {
+    min-height: 620px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 34px 0;
+}
+
+.web-auth-card {
+    width: 100%;
+    max-width: 460px;
+    background: #ffffff;
+    border: 1px solid var(--web-vien);
+    border-radius: 20px;
+    padding: 34px;
+    text-align: center;
+}
+
+.web-auth-icon {
+    width: 66px;
+    height: 66px;
+    border-radius: 18px;
+    background: #eff6ff;
+    color: var(--web-primary);
+    display: grid;
+    place-items: center;
+    font-size: 32px;
+    margin: 0 auto 18px;
+}
+
+.web-auth-card h1 {
+    font-size: 28px;
+    font-weight: 950;
+    margin-bottom: 8px;
+}
+
+.web-auth-input {
+    position: relative;
+}
+
+.web-auth-input i {
+    position: absolute;
+    top: 13px;
+    left: 14px;
+    color: #6b7280;
+}
+
+.web-auth-input input {
+    width: 100%;
+    height: 46px;
+    border: 1px solid var(--web-vien);
+    border-radius: 12px;
+    padding: 0 14px 0 42px;
+    outline: none;
+}
+
+.web-auth-input input:focus {
+    border-color: var(--web-primary);
+}
+
+.web-account-link {
+    height: 42px;
+    border: 1px solid var(--web-vien);
+    background: #ffffff;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #374151;
+    text-decoration: none;
+    padding: 0 12px;
+    font-weight: 800;
+}
+
+.web-account-link:hover {
+    background: #f9fafb;
+    color: var(--web-primary);
+}
+
+.web-account-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #dbeafe;
+    color: #1d4ed8;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.account-page-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.account-page-head h1 {
+    font-size: 30px;
+    font-weight: 950;
+    margin: 0;
+}
+
+.account-page-head p {
+    color: #6b7280;
+    margin: 6px 0 0;
+}
+
+.account-layout {
+    display: grid;
+    grid-template-columns: 0.8fr 1.4fr;
+    gap: 18px;
+}
+
+.account-card {
+    background: #ffffff;
+    border: 1px solid var(--web-vien);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.account-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #dbeafe;
+    color: #1d4ed8;
+    display: grid;
+    place-items: center;
+    font-size: 28px;
+    font-weight: 950;
+    margin-bottom: 14px;
+}
+
+.account-card h2 {
+    font-size: 20px;
+    font-weight: 950;
+    margin-bottom: 4px;
+}
+
+.account-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 11px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.account-line:last-child {
+    border-bottom: none;
+}
+
+.account-line span {
+    color: #6b7280;
+}
+
+.account-line strong {
+    text-align: right;
+}
+
+.account-card-head {
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--web-vien);
+    margin-bottom: 10px;
+}
+
+.account-card-head h2 {
+    margin: 0;
+}
+
+.account-card-head p {
+    color: #6b7280;
+    margin: 5px 0 0;
+}
+
+.account-order-item {
+    display: grid;
+    grid-template-columns: 1fr 170px 80px;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.account-order-item:last-child {
+    border-bottom: none;
+}
+
+@media (max-width: 992px) {
+    .account-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .account-order-item {
+        grid-template-columns: 1fr;
+    }
+
+    .account-order-item .text-end {
+        text-align: left !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .web-auth-card {
+        padding: 26px 18px;
+    }
+
+    .account-page-head {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .account-line {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .account-line strong {
+        text-align: left;
+    }
+}

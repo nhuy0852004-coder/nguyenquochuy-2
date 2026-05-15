@@ -1,5 +1,6 @@
 @php
     $soLuongGioHang = collect(session('giohang', []))->sum('so_luong');
+    $khachDangNhap = auth('khachhang')->user();
 @endphp
 
 <header class="web-header">
@@ -98,6 +99,20 @@
                     <i class="bi bi-search"></i>
                 </button>
 
+                @if ($khachDangNhap)
+                    <a href="{{ route('web.taikhoan.index') }}" class="web-account-link">
+                        <span class="web-account-avatar">
+                            {{ mb_substr($khachDangNhap->ho_ten, 0, 1) }}
+                        </span>
+                        <span class="d-none d-xl-inline">{{ $khachDangNhap->ho_ten }}</span>
+                    </a>
+                @else
+                    <a href="{{ route('web.dangnhap') }}" class="web-account-link">
+                        <i class="bi bi-person"></i>
+                        <span class="d-none d-xl-inline">Đăng nhập</span>
+                    </a>
+                @endif
+
                 <a href="{{ route('web.theodoi.index') }}" class="web-icon-btn" title="Theo dõi đơn hàng">
                     <i class="bi bi-receipt"></i>
                 </a>
@@ -149,6 +164,23 @@
                 <i class="bi bi-percent"></i>
                 Khuyến mãi
             </a>
+
+            @if ($khachDangNhap)
+                <a href="{{ route('web.taikhoan.index') }}">
+                    <i class="bi bi-person"></i>
+                    Tài khoản của tôi
+                </a>
+            @else
+                <a href="{{ route('web.dangnhap') }}">
+                    <i class="bi bi-person"></i>
+                    Đăng nhập
+                </a>
+
+                <a href="{{ route('web.dangky') }}">
+                    <i class="bi bi-person-plus"></i>
+                    Đăng ký
+                </a>
+            @endif
 
             <a href="{{ route('web.giohang.index') }}">
                 <i class="bi bi-cart"></i>

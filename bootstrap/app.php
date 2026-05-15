@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'kiemtraadmin' => \App\Http\Middleware\Kiemtraadmin::class,
             'kiemtravaitro' => \App\Http\Middleware\Kiemtravaitro::class,
+            'kiemtrakhachhang' => \App\Http\Middleware\Kiemtrakhachhang::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
