@@ -21,6 +21,29 @@
     };
 @endphp
 
+@php
+    $cotSapXep = $cotSapXep ?? 'thu_tu';
+    $huongSapXep = $huongSapXep ?? 'asc';
+
+    $sortClass = function ($cot) use ($cotSapXep, $huongSapXep) {
+        if ($cot !== $cotSapXep) {
+            return 'sort-link';
+        }
+
+        return 'sort-link active ' . ($huongSapXep === 'asc' ? 'asc' : 'desc');
+    };
+
+    $sortIcon = function ($cot) use ($cotSapXep, $huongSapXep) {
+        if ($cot !== $cotSapXep) {
+            return '<i class="bi bi-arrow-down-up"></i>';
+        }
+
+        return $huongSapXep === 'asc'
+            ? '<i class="bi bi-sort-up"></i>'
+            : '<i class="bi bi-sort-down"></i>';
+    };
+@endphp
+
 <div id="danhMucKetQua">
     <div class="category-stat-grid">
         <div class="category-stat-card">
@@ -68,54 +91,6 @@
         </div>
     </div>
 
-    @if ($tukhoa || $parentId || $kieuDanhMuc || ($trangthai !== null && $trangthai !== '') || $soLuongSanPham || $sapxep !== 'thu_tu' || $cotSapXep !== 'thu_tu' || $huongSapXep !== 'asc')
-        <div class="filter-active-box">
-            <div class="filter-active-title">
-                <i class="bi bi-funnel"></i>
-                Bộ lọc đang áp dụng
-            </div>
-
-            <div class="filter-active-tags">
-                @if ($tukhoa)
-                    <span>Từ khóa: {{ $tukhoa }}</span>
-                @endif
-
-                @if ($parentId)
-                    <span>
-                        Danh mục cha:
-                        @if ($parentId === 'goc')
-                            Danh mục gốc
-                        @else
-                            {{ optional($tatcadanhmuc->firstWhere('id', (int) $parentId))->ten_danh_muc }}
-                        @endif
-                    </span>
-                @endif
-
-                @if ($kieuDanhMuc)
-                    <span>
-                        Cấp:
-                        {{ $kieuDanhMuc === 'goc' ? 'Danh mục gốc' : 'Danh mục con' }}
-                    </span>
-                @endif
-
-                @if ($trangthai !== null && $trangthai !== '')
-                    <span>
-                        Trạng thái:
-                        {{ $trangthai === '1' ? 'Đang bật' : 'Đang tắt' }}
-                    </span>
-                @endif
-
-                @if ($soLuongSanPham)
-                    <span>Số lượng sản phẩm: Đã lọc</span>
-                @endif
-
-                @if ($sapxep && $sapxep !== 'thu_tu')
-                    <span>Sắp xếp: {{ $sapxep }}</span>
-                @endif
-            </div>
-        </div>
-    @endif
-
     <div class="category-layout-grid">
         <div class="content-card">
             <div class="content-card-header">
@@ -148,153 +123,131 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table align-middle">
+                    <table class="table align-middle category-table-real">
                         <thead>
                             <tr>
-                                <th style="width: 70px;">
-                                    <button type="button" class="{{ $sortClass('id') }}" data-sort-column="id">
-                                        ID
-                                        {!! $sortIcon('id') !!}
-                                    </button>
-                                </th>
-
-                                <th>
-                                    <button type="button" class="{{ $sortClass('ten_danh_muc') }}" data-sort-column="ten_danh_muc">
-                                        Danh mục
+                                <th style="min-width: 280px;">
+                                    <button
+                                        type="button"
+                                        class="{{ $sortClass('ten_danh_muc') }}"
+                                        data-sort-column="ten_danh_muc"
+                                    >
+                                        Tên danh mục
                                         {!! $sortIcon('ten_danh_muc') !!}
                                     </button>
                                 </th>
 
-                                <th>Danh mục cha</th>
+                                <th style="min-width: 180px;">Danh mục cha</th>
 
-                                <th>Breadcrumb</th>
+                                <th style="min-width: 230px;">Cấu trúc</th>
 
-                                <th style="width: 110px;">
-                                    <button type="button" class="{{ $sortClass('sanpham_count') }}" data-sort-column="sanpham_count">
+                                <th style="width: 120px;">
+                                    <button
+                                        type="button"
+                                        class="{{ $sortClass('sanpham_count') }}"
+                                        data-sort-column="sanpham_count"
+                                    >
                                         Sản phẩm
                                         {!! $sortIcon('sanpham_count') !!}
                                     </button>
                                 </th>
 
-                                <th style="width: 120px;">
-                                    <button type="button" class="{{ $sortClass('con_count') }}" data-sort-column="con_count">
-                                        Danh mục con
-                                        {!! $sortIcon('con_count') !!}
-                                    </button>
-                                </th>
-
-                                <th style="width: 90px;">
-                                    <button type="button" class="{{ $sortClass('thu_tu') }}" data-sort-column="thu_tu">
-                                        Thứ tự
-                                        {!! $sortIcon('thu_tu') !!}
-                                    </button>
-                                </th>
-
                                 <th style="width: 130px;">
-                                    <button type="button" class="{{ $sortClass('trang_thai') }}" data-sort-column="trang_thai">
+                                    <button
+                                        type="button"
+                                        class="{{ $sortClass('trang_thai') }}"
+                                        data-sort-column="trang_thai"
+                                    >
                                         Trạng thái
                                         {!! $sortIcon('trang_thai') !!}
                                     </button>
                                 </th>
 
-                                <th style="width: 130px;">
-                                    <button type="button" class="{{ $sortClass('created_at') }}" data-sort-column="created_at">
-                                        Ngày tạo
-                                        {!! $sortIcon('created_at') !!}
-                                    </button>
-                                </th>
-
-                                <th style="width: 160px;">Thao tác</th>
+                                <th style="width: 136px;">Thao tác</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             @forelse ($danhsachdanhmuc as $danhmuc)
                                 <tr>
-                                    <td class="fw-semibold">#{{ $danhmuc->id }}</td>
-
                                     <td>
-                                        <div class="category-name-cell">
-                                            <div class="category-level-icon {{ $danhmuc->parent_id ? 'child' : 'root' }}">
-                                                @if ($danhmuc->parent_id)
-                                                    <i class="bi bi-arrow-return-right"></i>
-                                                @else
-                                                    <i class="bi bi-folder"></i>
-                                                @endif
+                                        <div class="category-name-real">
+                                            <div class="category-name-title">
+                                                {{ $danhmuc->ten_danh_muc }}
                                             </div>
 
-                                            <div>
-                                                <div class="fw-bold">{{ $danhmuc->ten_danh_muc }}</div>
+                                            <div class="category-name-meta">
+                                                <span>#{{ $danhmuc->id }}</span>
+                                                <span>/{{ $danhmuc->duong_dan }}</span>
+                                            </div>
 
-                                                <div class="text-muted small">
-                                                    /{{ $danhmuc->duong_dan }}
+                                            @if ($danhmuc->mo_ta)
+                                                <div class="category-name-desc">
+                                                    {{ \Illuminate\Support\Str::limit($danhmuc->mo_ta, 90) }}
                                                 </div>
-
-                                                @if ($danhmuc->mo_ta)
-                                                    <div class="category-desc-small">
-                                                        {{ \Illuminate\Support\Str::limit($danhmuc->mo_ta, 70) }}
-                                                    </div>
-                                                @endif
-                                            </div>
+                                            @endif
                                         </div>
                                     </td>
 
                                     <td>
                                         @if ($danhmuc->cha)
-                                            <div class="category-parent-pill">
-                                                <i class="bi bi-folder2-open"></i>
+                                            <div class="category-parent-real">
                                                 {{ $danhmuc->cha->ten_danh_muc }}
                                             </div>
                                         @else
-                                            <span class="category-root-pill">
-                                                <i class="bi bi-diagram-3"></i>
+                                            <div class="category-parent-real muted">
                                                 Danh mục gốc
-                                            </span>
+                                            </div>
                                         @endif
                                     </td>
 
                                     <td>
-                                        <div class="category-breadcrumb">
-                                            @foreach (explode(' / ', $danhmuc->breadcrumb()) as $index => $item)
-                                                @if ($index > 0)
-                                                    <i class="bi bi-chevron-right"></i>
-                                                @endif
+                                        <div class="category-structure-real">
+                                            <div class="category-breadcrumb-real">
+                                                {{ $danhmuc->breadcrumb() }}
+                                            </div>
 
-                                                <span>{{ $item }}</span>
-                                            @endforeach
+                                            <div class="category-structure-meta">
+                                                <span>
+                                                    {{ $danhmuc->parent_id ? 'Danh mục con' : 'Danh mục gốc' }}
+                                                </span>
+
+                                                <span>Thứ tự: {{ $danhmuc->thu_tu }}</span>
+
+                                                <span>{{ $danhmuc->con_count }} mục con</span>
+                                            </div>
                                         </div>
                                     </td>
 
                                     <td>
-                                        <a href="{{ route('admin.sanpham.index', ['danhmuc_id' => $danhmuc->id]) }}" class="category-count-box">
-                                            <strong>{{ $danhmuc->sanpham_count }}</strong>
-                                            <span>sản phẩm</span>
+                                        <a
+                                            href="{{ route('admin.sanpham.index', ['danhmuc_id' => $danhmuc->id]) }}"
+                                            class="category-product-count-real"
+                                        >
+                                            {{ $danhmuc->sanpham_count }}
                                         </a>
                                     </td>
 
                                     <td>
-                                        <div class="category-count-box neutral">
-                                            <strong>{{ $danhmuc->con_count }}</strong>
-                                            <span>danh mục con</span>
-                                        </div>
-                                    </td>
+                                        <form action="{{ route('admin.danhmuc.doitrangthai', $danhmuc) }}" method="POST" class="status-toggle-form">
+                                            @csrf
+                                            @method('PATCH')
 
-                                    <td>{{ $danhmuc->thu_tu }}</td>
-
-                                    <td>
-                                        @if ($danhmuc->trang_thai)
-                                            <span class="badge-trang-thai badge-bat">Đang bật</span>
-                                        @else
-                                            <span class="badge-trang-thai badge-tat">Đang tắt</span>
-                                        @endif
-                                    </td>
-
-                                    <td class="text-muted">
-                                        {{ $danhmuc->created_at->format('d/m/Y H:i') }}
+                                            <button
+                                                type="submit"
+                                                class="status-switch {{ $danhmuc->trang_thai ? 'on' : 'off' }}"
+                                                title="Đổi trạng thái"
+                                                aria-label="Đổi trạng thái"
+                                            >
+                                                <span class="status-switch-track">
+                                                    <span class="status-switch-thumb"></span>
+                                                </span>
+                                            </button>
+                                        </form>
                                     </td>
 
                                     <td>
-                                        <div class="table-actions">
+                                        <div class="category-actions-real">
                                             <button
                                                 type="button"
                                                 class="btn-nho"
@@ -304,19 +257,6 @@
                                             >
                                                 <i class="bi bi-pencil"></i>
                                             </button>
-
-                                            <form action="{{ route('admin.danhmuc.doitrangthai', $danhmuc) }}" method="POST">
-                                                @csrf
-                                                @method('PATCH')
-
-                                                <button type="submit" class="btn-nho" title="Đổi trạng thái">
-                                                    @if ($danhmuc->trang_thai)
-                                                        <i class="bi bi-toggle-on"></i>
-                                                    @else
-                                                        <i class="bi bi-toggle-off"></i>
-                                                    @endif
-                                                </button>
-                                            </form>
 
                                             <form
                                                 action="{{ route('admin.danhmuc.destroy', $danhmuc) }}"
@@ -338,7 +278,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="10">
+                                    <td colspan="6">
                                         <div class="empty-state">
                                             <div class="empty-state-icon">
                                                 <i class="bi bi-tags"></i>

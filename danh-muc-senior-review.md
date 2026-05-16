@@ -54,7 +54,7 @@ Nên thêm bộ lọc theo:
 
 ---
 
-### 2.2 Sắp xếp cột
+<!-- ### 2.2 Sắp xếp cột
 Cho phép sort theo:
 
 - ID
@@ -65,7 +65,7 @@ Cho phép sort theo:
 
 #### Lợi ích
 - Giảm phụ thuộc vào thứ tự mặc định của DB.
-- Tăng tính chuyên nghiệp cho trang quản trị.
+- Tăng tính chuyên nghiệp cho trang quản trị. -->
 
 ---
 
